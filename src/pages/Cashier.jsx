@@ -17,7 +17,7 @@ export const CashierPage = () => {
 
 
 
-        <div className="flex flex-col w-full h-full  bg-white bg-opacity-20 ">
+        <div className="flex flex-col w-full h-full bg-white bg-opacity-20 ">
              <div className="flex items-end justify-between w-full flex-row-reverse">
                 <div className="flex items-end justify-start gap-2 w-1/3">
                     <button className={`grid-btn`}>01</button>
