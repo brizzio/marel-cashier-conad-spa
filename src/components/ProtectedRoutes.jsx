@@ -1,6 +1,6 @@
 
 import {Navigate, Outlet} from 'react-router-dom'
-import { AppLayout } from '../layouts/Application'
+//import { AppLayout } from '../layouts/Application'
 
 const useAuth=()=>{
   const user=localStorage.getItem('user')
@@ -15,7 +15,7 @@ const  ProtectedRoutes=() =>{
 
   const auth=useAuth()
 
-  return auth?<AppLayout><Outlet/></AppLayout>: <Navigate to="/login"/>
+  return auth?<Outlet/>: <Navigate to="/login"/>
 }
 
 export default ProtectedRoutes;

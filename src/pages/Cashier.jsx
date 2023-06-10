@@ -18,6 +18,16 @@ export const CashierPage = () => {
 
 
         <div className="flex flex-col w-full h-full bg-white bg-opacity-20 ">
+             content
+        </div>
+       
+    )
+    
+    };
+
+
+     /* <>
+      <div className="flex flex-col w-full h-full bg-white bg-opacity-20 ">
              <div className="flex items-end justify-between w-full flex-row-reverse">
                 <div className="flex items-end justify-start gap-2 w-1/3">
                     <button className={`grid-btn`}>01</button>
@@ -35,7 +45,7 @@ export const CashierPage = () => {
             </div>
             
             <div className={`flex grow w-full mt-1 ${swap?'':'flex-row-reverse'}`}>
-                {/*left column */}
+               
                 <div className="flex flex-col h-full w-1/3 p-1">
                     <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-1">
                     <button className={`grid-btn`}>FUNZ</button>
@@ -107,42 +117,4 @@ export const CashierPage = () => {
 
             </div>
         </div>
-       
-    )
-    
-    };
-
-
-     /* <>
-        <div className="flex items-end justify-between w-full debug">
-            <div className="flex items-end justify-start gap-2 w-1/2">
-                <button className={`grid-btn`}>01</button>
-                <button className={`grid-btn`}>02</button>
-                <button className={`grid-btn`}>03</button>
-                <button className={`grid-btn`}>04</button>
-                <button className={`grid-btn`}>05</button>
-
-            </div>
-            <div className="flex items-end justify-end w-1/2">
-                <button className={`grid-btn`}>01</button>
-            </div>
-
-        </div>
-
-        <div className="flex items-center justify-between w-full  debug">
-            <div className="flex items-end justify-start gap-2 w-1/2">
-                <button className={`grid-btn`}>01</button>
-                <button className={`grid-btn`}>02</button>
-                <button className={`grid-btn`}>03</button>
-                <button className={`grid-btn`}>04</button>
-                <button className={`grid-btn`}>05</button>
-
-            </div>
-            <div className="flex items-end justify-end w-1/2">
-                <button className={`grid-btn`}>01</button>
-            </div>
-
-        </div>
-
-        
-      </> */
+        */
