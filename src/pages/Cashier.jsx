@@ -42,7 +42,7 @@ export const CashierPage = () => {
             
             <div className={`flex grow w-full mt-1 ${swap?'':'flex-row-reverse'}`}>
                
-                <div className="flex flex-col h-full w-1/3 p-1">
+                <div className="flex flex-col h-full w-[40rem] p-1">
                     <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-1">
                     <button className={`grid-btn`}>FUNZ</button>
                     <button className={`grid-btn`}>SCONTO VALORE</button>
@@ -53,7 +53,7 @@ export const CashierPage = () => {
                     </div>
                     <Keyboard/>
                 </div>
-                <div className="grow grid grid-flow-row grid-cols-4 grid-rows-7 gap-1.5 px-3">
+                <div className="grow grid grid-flow-row grid-cols-4 grid-rows-7 gap-1.5 px-3 w-[20rem]">
                     <button className={`${regularBtnClass}`}>CONTR. PREZZO ART</button>
                     <button className={`${regularBtnClass}`}>RESO <br/> ART</button>
                     <button className={`${regularBtnClass}`}>STORNO ART PRECEDENTE</button>
@@ -79,7 +79,7 @@ export const CashierPage = () => {
                     <button className={`${regularBtnClass}`}>P. CASSA</button>   
                 </div>
 
-                <div className="flex flex-col h-full w-1/3 py-1 gap-1">
+                <div className="flex flex-col h-full w-[30rem] py-1 gap-1">
                     
                         <div className="grid grid-flow-row grid-cols-3 grid-rows-2 h-[6.5rem] ">
                             <div className={`w-full bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
