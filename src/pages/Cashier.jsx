@@ -12,33 +12,26 @@ export const CashierPage = () => {
 
     const toggleSwap = () => setSwap(state => !state)
 
-    
+    const tabBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
+
+    const regularBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
+
+    const largeBtnClass = `w-full py-[1.9rem] px-4 bg-white bg-opacity-90 text-teal-900 font-semibold border-2 border-teal-900 rounded-lg shadow-lg;`
+
     return(
-
-
-
-        <div className="flex flex-col w-full h-full bg-white bg-opacity-20 ">
-             content
-        </div>
-       
-    )
-    
-    };
-
-
-     /* <>
-      <div className="flex flex-col w-full h-full bg-white bg-opacity-20 ">
+        
+        <>
              <div className="flex items-end justify-between w-full flex-row-reverse">
                 <div className="flex items-end justify-start gap-2 w-1/3">
-                    <button className={`grid-btn`}>01</button>
-                    <button className={`grid-btn`}>02</button>
-                    <button className={`grid-btn`}>03</button>
-                    <button className={`grid-btn`}>04</button>
-                    <button className={`grid-btn`}>05</button>
+                    <button className={`${tabBtnClass}`}>01</button>
+                    <button className={`${tabBtnClass}`}>02</button>
+                    <button className={`${tabBtnClass}`}>03</button>
+                    <button className={`${tabBtnClass}`}>04</button>
+                    <button className={`${tabBtnClass}`}>05</button>
 
                 </div>
                 <div className="flex items-end justify-end w-auto">
-                <button className={`grid-btn`}
+                <button className={`${tabBtnClass}`}
                     onClick={toggleSwap}>{swap?'Mancino':'Destro'}</button>
                 </div>
 
@@ -57,42 +50,39 @@ export const CashierPage = () => {
                     </div>
                     <Keyboard/>
                 </div>
-                <div className="flex flex-col h-full w-5/12 py-1 px-3 gap-2">
+                <div className="flex flex-col grow w-5/12 py-1 px-3 gap-1.5">
                     <div className="flex items-center justify-center gap-1">
-                        <button className={`grid-btn`}>CONTR. PREZZO ART</button>
-                        <button className={`grid-btn`}>RESO ART</button>
-                        <button className={`grid-btn`}>STORNO ART PRECEDENTE</button>
-                        <button className={`grid-btn`}>STORNO ULT ARTICOLO</button>
+                        <button className={`${regularBtnClass}`}>CONTR. PREZZO ART</button>
+                        <button className={`${regularBtnClass}`}>RESO <br/> ART</button>
+                        <button className={`${regularBtnClass}`}>STORNO ART PRECEDENTE</button>
+                        <button className={`${regularBtnClass}`}>STORNO ULT ARTICOLO</button>
                     </div>
                     <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large`}>SHOP BIO PICCOLA</button>
-                        <button className={`btn-large`}>SHOP BIO GRANDE</button>
+                        <button className={`${largeBtnClass}`}>SHOP BIO PICCOLA</button>
+                        <button className={`${largeBtnClass}`}>SHOP BIO GRANDE</button>
                     </div>
                     <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large`}>G. VARI</button>
-                        <button className={`btn-large`}>MUI. SA. FO.</button>
+                        <button className={`${largeBtnClass}`}>G. VARI</button>
+                        <button className={`${largeBtnClass}`}>MUI. SA. FO.</button>
                     </div>
                     <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large`}>BANC. SA. FO.</button>
-                        <button className={`btn-large`}>PANET</button>
+                        <button className={`${largeBtnClass}`}>BANC. SA. FO.</button>
+                        <button className={`${largeBtnClass}`}>PANET</button>
                     </div>
                     <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large`}>SURGEL</button>
-                        <button className={`btn-large`}>NO FOOD</button>
+                        <button className={`${largeBtnClass}`}>SURGEL</button>
+                        <button className={`${largeBtnClass}`}>NO FOOD</button>
                     </div>
                     <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large`}>PESCE</button>
-                        <button className={`btn-large`}>CARNE</button>
+                        <button className={`${largeBtnClass}`}>PESCE</button>
+                        <button className={`${largeBtnClass}`}>CARNE</button>
                     </div>
-                    <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large`}>01</button>
-                        <button className={`btn-large`}>02</button>
-                    </div>
-                    <div className="flex items-start justify-center gap-1">
-                        <button className={`btn-large w-1/2`}>FRUTTA</button>
+                   
+                    <div className="flex items-start justify-center gap-2">
+                        <button className={`py-[1.9rem] px-4 w-1/2 bg-white bg-opacity-90 font-semibold border-2 border-teal-900 rounded-lg shadow-lg`}>FRUTTA</button>
                         <div className="flex gap-1 w-1/2">
-                            <button className={`btn-large`}>SACCH. BIO ORTO</button>
-                            <button className={`btn-large`}>PRELIEVO CASSA</button>
+                            <button className={`py-[1.9rem] text-center w-1/2 bg-white bg-opacity-90 text-teal-800 rounded-lg shadow-lg`}>SACCH. BIO</button>
+                            <button className={`py-[1.9rem] text-center w-1/2 bg-white bg-opacity-90 text-teal-800 rounded-lg shadow-lg`}>P. CASSA</button>
                         </div>
                     </div>
                 </div>
@@ -116,5 +106,13 @@ export const CashierPage = () => {
                 </div>
 
             </div>
-        </div>
+        </>
+      
+    )
+    
+    };
+
+
+     /* <>
+      
         */
