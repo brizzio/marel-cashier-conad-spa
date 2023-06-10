@@ -35,3 +35,38 @@ const btnClass = `w-full py-2 px-4 bg-white text-stone-800 font-semibold rounded
 }
 
 export default Keyboard
+
+{/* <div className="flex items-center justify-center gap-1">
+                        <button className={`${regularBtnClass}`}>CONTR. PREZZO ART</button>
+                        <button className={`${regularBtnClass}`}>RESO <br/> ART</button>
+                        <button className={`${regularBtnClass}`}>STORNO ART PRECEDENTE</button>
+                        <button className={`${regularBtnClass}`}>STORNO ULT ARTICOLO</button>
+                    </div>
+                    <div className="flex items-start justify-center gap-1">
+                        <button className={`${largeBtnClass}`}>SHOP BIO PICCOLA</button>
+                        <button className={`${largeBtnClass}`}>SHOP BIO GRANDE</button>
+                    </div>
+                    <div className="flex items-start justify-center gap-1">
+                        <button className={`${largeBtnClass}`}>G. VARI</button>
+                        <button className={`${largeBtnClass}`}>MUI. SA. FO.</button>
+                    </div>
+                    <div className="flex items-start justify-center gap-1">
+                        <button className={`${largeBtnClass}`}>BANC. SA. FO.</button>
+                        <button className={`${largeBtnClass}`}>PANET</button>
+                    </div>
+                    <div className="flex items-start justify-center gap-1">
+                        <button className={`${largeBtnClass}`}>SURGEL</button>
+                        <button className={`${largeBtnClass}`}>NO FOOD</button>
+                    </div>
+                    <div className="flex items-start justify-center gap-1">
+                        <button className={`${largeBtnClass}`}>PESCE</button>
+                        <button className={`${largeBtnClass}`}>CARNE</button>
+                    </div>
+                   
+                    <div className="flex items-start justify-center gap-2">
+                        <button className={`py-[1.9rem] px-4 w-1/2 bg-white bg-opacity-90 font-semibold border-2 border-teal-900 rounded-lg shadow-lg`}>FRUTTA</button>
+                        <div className="flex gap-1 w-1/2">
+                            <button className={`py-[1.9rem] text-center w-1/2 bg-white bg-opacity-90 text-teal-800 rounded-lg shadow-lg`}>SACCH. BIO</button>
+                            <button className={`py-[1.9rem] text-center w-1/2 bg-white bg-opacity-90 text-teal-800 rounded-lg shadow-lg`}>P. CASSA</button>
+                        </div>
+                    </div> */}
