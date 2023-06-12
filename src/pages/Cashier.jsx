@@ -1,6 +1,6 @@
 import React from 'react';
 import { atom, useAtom } from 'jotai'
-
+import { useNavigate } from 'react-router-dom';
 import Keyboard from '../components/Keyboard';
 
 //https://www.kindacode.com/snippet/tailwind-css-make-a-child-element-fill-the-remaining-space/
@@ -10,7 +10,11 @@ export const CashierPage = () => {
 
     const [swap, setSwap] = React.useState(false)
 
+    const navigate = useNavigate()
+
     const toggleSwap = () => setSwap(state => !state)
+
+    const navigateToLogoutPage = ()=> navigate('/logout')
 
     const tabBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
 
@@ -92,7 +96,7 @@ export const CashierPage = () => {
 
                         <div className="h-[6rem] grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
                             
-                            <button className={`${regularBtnClass}`}>CLEAR PROD</button>
+                            <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}>ESCI</button>
                             <button className={`${regularBtnClass}`}>QUALCOSA</button>
                             <button className={`${largeBtnClass}`}>TOTALE</button>
                         </div> 

@@ -4,6 +4,7 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 
 
 import Login from '../pages/Login';
+import { LogoutPage } from '../pages/Logout';
 import { CashierPage } from '../pages/Cashier';
 import { DashboardPage } from '../pages/Dashboard';
 import { LandingPage } from '../pages/Landing';
@@ -24,6 +25,7 @@ const MainRoutes = () => (
             <Route path="/" element={<Navigate replace to="dashboard" />}/>
             <Route path="dashboard" element={<DashboardPage/>}/>
             <Route path="cashier" element={<CashierPage/>}/>
+            <Route path="logout" element={<LogoutPage/>}/>
                               
              {/* <Route path="settings" element={<Settings/>}/>            
              <Route path="users" element={<Users extraItem="test extra item from router"/>}/>            

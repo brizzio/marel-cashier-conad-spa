@@ -6,7 +6,11 @@ export default function usePersistentContext(key) {
     const { data } = useQuery([key], () => JSON.parse(localStorage.getItem(key)));
   
     const { mutateAsync: setValue } = useMutation(
-      (value) => localStorage.setItem(key, JSON.stringify(value)),
+      
+      (value) => {
+        console.log('mutate', value)
+        localStorage.setItem(key, JSON.stringify(value))
+      },
       {
         onMutate: (mutatedData) => {
           const current = data;
