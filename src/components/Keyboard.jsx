@@ -2,7 +2,7 @@ import React from 'react'
 
 const Keyboard = () => {
 
-const btnClass = `w-full py-2 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
+const btnClass = `w-full py-2 px-4 bg-white text-stone-800 text-3xl font-semibold rounded-lg shadow-md `
 
   return (
     

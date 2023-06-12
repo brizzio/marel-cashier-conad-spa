@@ -5,6 +5,7 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 
 import Login from '../pages/Login';
 import { CashierPage } from '../pages/Cashier';
+import { DashboardPage } from '../pages/Dashboard';
 
 import ProtectedRoutes from './ProtectedRoutes';
 import PublicRoutes from './PublicRoutes';
@@ -18,7 +19,8 @@ const MainRoutes = () => (
         {/** Wrap all Route under ProtectedRoutes element */}
         <Route path="/" element={<ProtectedRoutes/>}>
           
-            <Route path="/" element={<Navigate replace to="cashier" />}/>
+            <Route path="/" element={<Navigate replace to="dashboard" />}/>
+            <Route path="dashboard" element={<DashboardPage/>}/>
             <Route path="cashier" element={<CashierPage/>}/>
                               
              {/* <Route path="settings" element={<Settings/>}/>            

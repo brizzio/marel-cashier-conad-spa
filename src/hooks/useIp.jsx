@@ -1,17 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-import { useFetch } from './useFetch'
+import React from 'react'
+import usePersistentContext from './usePersistentContext'
+
 
 export const useIp= () => {
 
-  const [state, setState] = useState(null)
+  //const [ipData, setIpData] = usePersistentContext('ipData')
 
-  const gotData = useFetch('https://hutils.loxal.net/whois')
- 
-  useEffect(() => {
-    if(!state?.data) setState(gotData)
+  const [ipData, setIpData] = React.useState('')
 
-  }, [gotData])
+  React.useEffect(() => {
+    if(!ipData){
+      console.log(ipData)
+      fetch('https://hutils.loxal.net/whois')
+      .then(res => res.json())
+      .then(res=>setIpData(res))
+    }
+    
+  },[])
 
-  return state
+  
+
+  return {ipData}
 }
