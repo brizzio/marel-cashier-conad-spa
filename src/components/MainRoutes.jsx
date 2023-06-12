@@ -6,6 +6,7 @@ import {Routes, Route, Navigate} from 'react-router-dom'
 import Login from '../pages/Login';
 import { CashierPage } from '../pages/Cashier';
 import { DashboardPage } from '../pages/Dashboard';
+import { LandingPage } from '../pages/Landing';
 
 import ProtectedRoutes from './ProtectedRoutes';
 import PublicRoutes from './PublicRoutes';
@@ -17,6 +18,7 @@ const MainRoutes = () => (
       <Routes>
         {/** Protected Routes */}
         {/** Wrap all Route under ProtectedRoutes element */}
+        <Route index element={<LandingPage />} />
         <Route path="/" element={<ProtectedRoutes/>}>
           
             <Route path="/" element={<Navigate replace to="dashboard" />}/>
@@ -35,6 +37,7 @@ const MainRoutes = () => (
         {/** Wrap all Route under PublicRoutes element */}
         <Route path="login" element={<PublicRoutes/>}>
           <Route path="/login" element={<Login/>}/>
+
         </Route>
       </Routes>
 
