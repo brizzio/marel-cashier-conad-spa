@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useIp } from "./useIp";
+
+import usePersistentContext from "./usePersistentContext";
 
 const useTimeZoneDate = () => {
 
 
-        const ip = useIp()
+        const [ip]= usePersistentContext('ipData')
 
         
-        let tz = ip?.data.timeZone
+        let tz = ip?ip.timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone
 
         var d = new Date();
         let ds = d.toLocaleString(undefined, { timeZone: tz, timeZoneName: "short"  }).replace(",","").trim()

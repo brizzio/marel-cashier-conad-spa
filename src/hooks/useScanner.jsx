@@ -8,13 +8,14 @@ import useTimeZoneDate from './useTimeZone'
 
 const useScanner = () => {
 
-const [isScannerOn, setIsScannerOn] = useState(false)
-const [readed, setReaded] = usePersistentContext('readed') //useState({code:'', count:0})
+const [isScannerOn, setIsScannerOn] = usePersistentContext('isScannerOn')
+const [readed, setReaded] = usePersistentContext('readed')
+ //useState({code:'', count:0})
 const counter = useRef(0)
 const searchCounter = useRef(0)
 
 const hasSerial = useRef(!!('serial' in navigator))
-const port = useRef(null)
+let port = useRef(null)
 const portInfo = useRef(null)
 
 
@@ -35,6 +36,7 @@ let initialize = async () => {
     //clear memory
     console.log('Clearing reading memory');
     setReaded({})
+    
 
     // The Web Serial API is supported.
     console.log('Awesome, The serial port is supported.');
@@ -43,14 +45,38 @@ let initialize = async () => {
     // Get all serial ports the user has previously granted the website access to.
     const ports = await navigator.serial.getPorts();
     console.log(ports);
+    let ActivePort
 
-    if (!port.current){
-    console.log('we dont have any port selected, lets get one!!');
-    port.current = await navigator.serial.requestPort();
-    // Wait for the serial port to open.
-    await port.current.open({ baudRate:9600 });
-    setIsScannerOn(true)
+    const options = {
+      baudRate: 9600,
+      dataBits: 8,
+      parity: "none",
+      stopBits: 1,
+    };
+    
+    try {
+
+      if (ports && ports.length > 0) {
+
+        console.log('we have an selected port, lets get it!!', ports[0]);
+        
+        port.current = ports[0];
+      } else{
+
+        console.log('we dont have any port selected, lets get one!!');
+        port.current = await navigator.serial.requestPort();
+
+      }
+      
+    } catch (error) {
+      console.log('error opening port!', error);
     }
+    
+   
+    await port.current.open(options);
+    
+    //port.current = ActivePort
+    setIsScannerOn(true)
     
     console.log('Now we have an opened port ... ', port.current.getInfo());
 
@@ -89,13 +115,16 @@ let initialize = async () => {
             var it
             counter.current=counter.current+1
             let code = scanned.replace(/\W/g, "")
-            setReaded({
+
+            let currentRead = {
               code:code, 
               count:counter.current,
               origin:'scanner',
               processed:false,
               ...checkEan(code),
-              })
+              }
+            setReaded(currentRead)
+           
             //...searchProductInPriceListFromScannerReading(code)
 
             scanned =''
@@ -200,7 +229,7 @@ let initialize = async () => {
   
 
   return (
-    {portInfo, initialize, isScannerOn, manualReading}
+    {portInfo, initialize, isScannerOn, manualReading, readed}
   )
 }
 

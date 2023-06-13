@@ -82,9 +82,9 @@ export const LandingPage = () => {
 
     return(
 
-    <div  className="flex w-screen h-screen bg-gray-500 items-start justify-center">
+    <div  className="flex w-screen h-screen bg-stone-100 items-start justify-center">
        <div className="relative flex flex-col w-10/12 h-full p-3 bg-gray-100 "
-       style={{backgroundImage: 'url(/bg.jpg)',
+       style={{backgroundImage: 'url(https://static.vecteezy.com/system/resources/thumbnails/006/469/228/small/abstract-white-background-with-halftone-texture-free-vector.jpg)',
        backgroundPosition: 'center',
        backgroundRepeat: 'no-repeat', 
        backgroundSize: 'cover' 
