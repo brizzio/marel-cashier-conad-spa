@@ -21,9 +21,9 @@ export const CashierPage = () => {
 
     
 
-    const tabBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
+    const tabBtnClass = `h-full w-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
 
-    const swapBtnClass = ` py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md `
+    const swapBtnClass = ` h-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md `
 
     const regularBtnClass = `bg-white text-stone-800 font-semibold 
     border-2 border-teal-900 rounded-lg shadow-lg`
@@ -35,9 +35,9 @@ export const CashierPage = () => {
 
     return(
         
-        <>
-             <div className="flex items-center justify-between w-full flex-row-reverse">
-                <div className="flex items-end justify-start gap-2 w-5/12 p-1">
+        <> 
+             <div className="flex items-center justify-between w-full h-[50px] flex-row-reverse">
+                <div className="flex h-full items-end justify-start gap-2 w-5/12 p-1">
                     <button className={`${tabBtnClass}`}>01</button>
                     <button className={`${tabBtnClass}`}>02</button>
                     <button className={`${tabBtnClass}`}>03</button>
@@ -52,20 +52,20 @@ export const CashierPage = () => {
 
             </div>
             
-            <div className={`flex grow w-full mt-1 ${swap?'':'flex-row-reverse'}`}>
+            <div className={`flex h-5/6 w-full mt-1 ${swap?'':'flex-row-reverse'}`}>
                
-                <div className="flex flex-col h-full w-5/12 p-1">
-                    <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-1 h-2/6">
-                    <button className={`grid-btn`}>FUNZ</button>
-                    <button className={`grid-btn`}>SCONTO VALORE</button>
-                    <button className={`grid-btn`}>SCONTO %</button>
-                    <button className={`grid-btn`}>APERTURA CASSA</button>
-                    <button className={`grid-btn`}>RIST. SCONTRINI</button>
-                    <button className={`grid-btn`}>PARC/ RICUP. SCONTRINI</button>
+                <div className="flex flex-col h-full w-5/12 gap-2 pr-2">
+                    <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-2 h-1/6">
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>FUNZ</button>
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO VALORE</button>
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO %</button>
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>APERTURA CASSA</button>
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>RIST. SCONTRINI</button>
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>RICUP. SCONTRINI</button>
                     </div>
                     <Keyboard />
                 </div>
-                <div className="grow grid grid-flow-row grid-cols-4 grid-rows-7 gap-1.5 px-3 w-3/12">
+                <div className="h-full grid grid-flow-row grid-cols-4 grid-rows-7 gap-1 px-3 w-3/12">
                     <button className={`${regularBtnClass}`}>CONTR. PREZZO ART</button>
                     <button className={`${regularBtnClass}`}>RESO <br/> ART</button>
                     <button className={`${regularBtnClass}`}>STORNO ART PRECEDENTE</button>
@@ -93,16 +93,16 @@ export const CashierPage = () => {
 
                 <div className="flex flex-col h-full w-4/12 py-1 gap-1">
                     
-                        <div className="grid grid-flow-row grid-cols-3 grid-rows-2 h-[6.5rem] ">
-                            <div className={`w-full bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
-                                <div>TOTALE</div>
-                                <div>120,00</div>
-                            </div>
+                        
+                        <div className={`w-full h-1/6 bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
+                            <div>TOTALE</div>
+                            <div>120,00</div>
                         </div>
+                       
 
-                        <div className="grow w-full border border-stone-600 rounded-lg bg-white bg-opacity-50"></div>
+                        <div className="h-4/6 w-full border border-stone-600 rounded-lg bg-white bg-opacity-50"></div>
 
-                        <div className="h-[6rem] grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
+                        <div className="h-1/6 grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
                             
                             <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}>ESCI</button>
                             <button className={`${regularBtnClass}`}>QUALCOSA</button>

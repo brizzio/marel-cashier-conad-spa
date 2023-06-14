@@ -35,7 +35,8 @@ export const AppLayout = ({
 
     return(
     <div  className="flex w-screen h-screen bg-stone-100 items-start justify-center">
-       <div ref={div} className="relative flex flex-col w-10/12 h-full p-3 bg-gray-100 "
+       <div  className={`relative flex flex-col h-full w-full p-3 bg-gray-100 md:h-[520]`}
+
        style={{backgroundImage: 'url(https://static.vecteezy.com/system/resources/thumbnails/006/469/228/small/abstract-white-background-with-halftone-texture-free-vector.jpg)',
        backgroundPosition: 'center',
        backgroundRepeat: 'no-repeat', 
@@ -56,12 +57,13 @@ export const AppLayout = ({
                 </span>
             </div>
         </div>
-        <div className={`flex flex-col grow w-full mt-2  rounded drop-shadow-lg bg-white bg-opacity-20`}>
+        <div ref={div} className={`flex flex-col  h-full w-full  rounded drop-shadow-lg bg-white bg-opacity-20`}>
         
             {children}
 
         </div>
         <div className={`w-full  h-[${pixelsToRem(headerHeight)}rem]  py-[1rem] mt-2 bg-white bg-opacity-50 border border-purple-800 border-opacity-30 rounded-xl flex flex-row items-center justify-end px-3`}>
+            <span>content height: {height}</span>
             <Timer/>
         </div>
        </div>

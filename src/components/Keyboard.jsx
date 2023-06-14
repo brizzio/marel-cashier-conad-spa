@@ -109,16 +109,16 @@ const Keyboard = () => {
     }
 
 
-const btnClass = `w-full py-2 px-4 bg-white text-stone-800 text-3xl font-semibold rounded-lg shadow-md `
+const btnClass = `w-full py-1.5 px-2 bg-white text-stone-800 text-3xl font-semibold rounded-lg shadow-md `
 
 const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-white':'bg-white text-stone-800'} text-3xl font-semibold rounded-lg shadow-md `
 
   return (
     
-        <div className="flex flex-col gap-1 h-full pt-2 ">
-            <div className={`relative w-full h-[9rem] bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg px-3 justify-between pt-2`}>
+        <div className="flex flex-col h-full gap-2 ">
+            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between`}>
             <input  hidden ref={inputRef} className = 'text-black z-10' value={input} onChange={e => setInput(e.target.value)} />
-                <div  className={`w-full flex flex-row text-white text-4xl gap-3  items-center py-4`}>
+                <div  className={`w-full flex flex-row text-white text-4xl gap-3  items-center`}>
                     <span className={quantityClass}>{input}</span>
                     <span className='pb-1'>|</span>
                     <span>{!!scan?scan.code:''}</span>
@@ -131,7 +131,7 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
                 </div>
             </div>
         
-        <div className="grow grid grid-flow-row grid-cols-3 grid-rows-5 gap-1.5">
+        <div className="h-5/6 grid grid-flow-row grid-cols-3 grid-rows-5 gap-1.5">
             <button className={qBtnClass} onClick={qBtnClick}>{quantityButtonTitle}</button>
             <button className={btnClass}>000</button>
             <button className={btnClass}>BACK</button>
