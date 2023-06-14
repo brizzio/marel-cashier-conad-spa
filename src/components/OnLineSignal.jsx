@@ -14,7 +14,7 @@ const OnLineSignal = () => {
     console.log('connected', isOnLine , status)
     if(isOnLine !== status) setIsOnLine(status)
 
-  },[navigator.onLine])
+  })
 
   return (
     <>

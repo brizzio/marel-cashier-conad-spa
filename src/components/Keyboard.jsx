@@ -19,6 +19,7 @@ const Keyboard = () => {
     
     
     const inputRef = React.useRef()
+   
 
     const { clearReaded, readed} = useScanner()
 
@@ -28,6 +29,7 @@ const Keyboard = () => {
         const gotReaded = JSON.stringify(readed) !== '{}'
         if(!isQuantityButtonClicked && gotReaded) processReading(readed)
         gotReaded && logNewReadingToStorage(readed) 
+
     }, [readed, isQuantityButtonClicked])
 
 
@@ -102,9 +104,7 @@ const Keyboard = () => {
         setQuantitybuttonTitle(defaultTitle)
         setQuantityClass(cn)
         setQuantity(input)
-        
-        
-
+       
         
     }
 
@@ -116,14 +116,14 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
   return (
     
         <div className="flex flex-col gap-1 h-full pt-2 ">
-            <div className={`relative w-full h-[9rem] bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg px-3 items-center pt-2`}>
-            <input  hidden ref={inputRef} className = 'text-black' value={input} onChange={e => setInput(e.target.value)} />
-                <div className={`w-full flex flex-row text-white text-7xl gap-3  items-center`}>
+            <div className={`relative w-full h-[9rem] bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg px-3 justify-between pt-2`}>
+            <input  hidden ref={inputRef} className = 'text-black z-10' value={input} onChange={e => setInput(e.target.value)} />
+                <div  className={`w-full flex flex-row text-white text-4xl gap-3  items-center py-4`}>
                     <span className={quantityClass}>{input}</span>
                     <span className='pb-1'>|</span>
                     <span>{!!scan?scan.code:''}</span>
                 </div>
-                <div className={`absolute bottom-2 w-full h-fit flex flex-row text-white text-2xl font-thin justify-between px-4 items-center`}>
+                <div className={`absolute bottom-2 w-full h-fit flex flex-row text-white font-thin justify-between px-4 items-center`}>
                     <span>{!!scan?scan.evaluationType: ''}</span>
                     <span>{!!scan?scan.count: ''}</span>
                     <span>{!!scan?scan.read_at: ''}</span>
