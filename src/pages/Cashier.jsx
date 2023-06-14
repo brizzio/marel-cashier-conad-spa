@@ -17,11 +17,9 @@ export const CashierPage = () => {
 
     const navigateToLogoutPage = ()=> navigate('/logout')
     
-    const { isScannerOn, readed} = useScanner()
+    const { isScannerOn} = useScanner()
 
-    React.useEffect(()=>{
-        console.log('readed changed', readed)
-    }, [readed])
+    
 
     const tabBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
 
@@ -65,7 +63,7 @@ export const CashierPage = () => {
                     <button className={`grid-btn`}>RIST. SCONTRINI</button>
                     <button className={`grid-btn`}>PARC/ RICUP. SCONTRINI</button>
                     </div>
-                    <Keyboard lastRead={readed}/>
+                    <Keyboard />
                 </div>
                 <div className="grow grid grid-flow-row grid-cols-4 grid-rows-7 gap-1.5 px-3 w-3/12">
                     <button className={`${regularBtnClass}`}>CONTR. PREZZO ART</button>

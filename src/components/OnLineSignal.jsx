@@ -1,17 +1,26 @@
 import React from 'react'
-import useInternetStatus from '../hooks/useInternetStatus'
+import usePersistentContext from '../hooks/usePersistentContext'
+
+
 
 const OnLineSignal = () => {
  
-  const [signal, setSignal] = React.useState(false) 
-  const status = useInternetStatus()
+  const [isOnLine, setIsOnLine] = usePersistentContext('internet');
   
-  React.useEffect(() => setSignal(status), [status])
+  
+  React.useEffect(()=>{
+
+    let status = !!navigator.onLine
+    console.log('connected', isOnLine , status)
+    if(isOnLine !== status) setIsOnLine(status)
+
+  },[navigator.onLine])
 
   return (
     <>
-    {signal?'we have connection'
-        :'disconnected'
+    {isOnLine
+    ?<i className="fas fa-wifi"></i>
+    :<i className="fas fa-wifi">/</i>
     }
     </>
     

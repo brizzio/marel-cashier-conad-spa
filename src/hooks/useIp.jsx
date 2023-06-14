@@ -1,34 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
-import { useFetch } from './useFetch'
 import usePersistentContext from './usePersistentContext'
+
 
 
 export const useIp= () => {
 
-  const [state, setState] = React.useState({})
+  const key = 'ipData'
 
-  const {data, isLoading, error} = useFetch('https://hutils.loxal.net/whois')
-
-
+  const [ipData, setIpData] = usePersistentContext(key);
 
   React.useEffect(() => {
-    console.log('data, isLoading, error', data, isLoading, error)
-    setState({
-      data: data,
-      isLoading: isLoading,
-      error: error,
-    })
-  }, [isLoading])
+    let existing = localStorage.getItem(key)
+    if(!existing) init()
+    
+  }, []);
+
+  const init = async () => {
+    const response = await fetch(
+      "https://hutils.loxal.net/whois"
+    ).then((response) => response.json());
+    console.log('ip data initialized', response)
+    // update the state
+    setIpData(response);
+  };
+
   
 
-  /* const init = async () =>{
-       const data = fetch('https://hutils.loxal.net/whois')
-       setIpData((await data).json())
-  }
- */
-  
-  
 
-  return state
+  return ipData
 }

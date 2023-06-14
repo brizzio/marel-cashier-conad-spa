@@ -226,10 +226,13 @@ let initialize = async () => {
 
     }
   
+  const clearReaded = ()=>{
+    localStorage.setItem('readed', JSON.stringify({}))
+  }
   
 
   return (
-    {portInfo, initialize, isScannerOn, manualReading, readed}
+    {portInfo, initialize, isScannerOn, manualReading, readed, clearReaded}
   )
 }
 

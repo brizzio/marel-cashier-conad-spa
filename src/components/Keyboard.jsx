@@ -1,23 +1,59 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-extra-boolean-cast */
 /* eslint-disable react/prop-types */
 import React from 'react'
+import useScanner from '../hooks/useScanner';
 
-const Keyboard = ({lastRead}) => {
+const Keyboard = () => {
 
     const defaultTitle = 'Q'
     const confirmTitle = 'CONFERMA'
     const cn = `text-stone-400`
 
-    const [code, setCode] = React.useState('')
+    const [scan, setScan] = React.useState({})
     const [quantity, setQuantity] = React.useState(1)
     const [input, setInput] = React.useState('1')
     const [quantityButtonTitle, setQuantitybuttonTitle] = React.useState(defaultTitle)
     const [isQuantityButtonClicked, setIsQuantityButtonClicked] = React.useState(false)
     const [quantityClass, setQuantityClass] = React.useState(cn)
-    const [waitForNewRead, setWaitForNewRead] = React.useState(false)
-    const obj = React.useRef()
+    
+    
     const inputRef = React.useRef()
 
-    React.useEffect(() =>{ 
+    const { clearReaded, readed} = useScanner()
+
+
+    React.useEffect(()=>{
+        console.log('kb readed changed', readed)
+        const gotReaded = JSON.stringify(readed) !== '{}'
+        if(!isQuantityButtonClicked && gotReaded) processReading(readed)
+        gotReaded && logNewReadingToStorage(readed) 
+    }, [readed, isQuantityButtonClicked])
+
+
+    const processReading=(data)=>{
+        setScan(data)
+        const updatedRead = {
+            ...data, 
+            quantity:Number(quantity),
+            processed:true
+        }
+        console.log('updatedRead',updatedRead)
+        setInput(quantity)
+        setQuantity(1)
+        
+    }
+
+
+    const logNewReadingToStorage = (data)=>{
+        
+        let existing = localStorage.getItem('readings')
+        existing = existing ? JSON.parse(existing) : []
+        localStorage.setItem("readings",JSON.stringify([...existing, data])); 
+        clearReaded()
+    }
+
+    /* React.useEffect(() =>{ 
     
     
     console.log('key eff obj',lastRead, isQuantityButtonClicked, waitForNewRead,input)
@@ -37,7 +73,7 @@ const Keyboard = ({lastRead}) => {
         setQuantity(1)
        
     }
-    },[lastRead, isQuantityButtonClicked, waitForNewRead, input, quantity])
+    },[lastRead, isQuantityButtonClicked, waitForNewRead, input, quantity]) */
 
     const handleKeyClick= (e)=>{
         //console.log(e)
@@ -55,9 +91,9 @@ const Keyboard = ({lastRead}) => {
             setQuantityClass(`text-white w-fit bg-white/20`)
             setQuantitybuttonTitle(confirmTitle)
             setIsQuantityButtonClicked(true)
-            setCode('')
+            setScan({})
             setInput('')
-            setWaitForNewRead(true)
+            clearReaded()
             
             return;
         }
@@ -66,7 +102,7 @@ const Keyboard = ({lastRead}) => {
         setQuantitybuttonTitle(defaultTitle)
         setQuantityClass(cn)
         setQuantity(input)
-        setInput('1')
+        
         
 
         
@@ -85,12 +121,12 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
                 <div className={`w-full flex flex-row text-white text-7xl gap-3  items-center`}>
                     <span className={quantityClass}>{input}</span>
                     <span className='pb-1'>|</span>
-                    <span>{code}</span>
+                    <span>{!!scan?scan.code:''}</span>
                 </div>
                 <div className={`absolute bottom-2 w-full h-fit flex flex-row text-white text-2xl font-thin justify-between px-4 items-center`}>
-                    <span>{obj.current?obj.current.evaluationType: ''}</span>
-                    <span>{obj.current?obj.current.count: ''}</span>
-                    <span>{obj.current?obj.current.read_at: ''}</span>
+                    <span>{!!scan?scan.evaluationType: ''}</span>
+                    <span>{!!scan?scan.count: ''}</span>
+                    <span>{!!scan?scan.read_at: ''}</span>
 
                 </div>
             </div>
