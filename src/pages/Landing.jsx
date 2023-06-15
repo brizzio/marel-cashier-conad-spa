@@ -15,13 +15,8 @@ import OnLineSignal from '../components/OnLineSignal';
 export const LandingPage = () => {
 
     const navigate = useNavigate();
-
-    const [isMobile,setIsMobile] = React.useState({})
-    
     const {getFlagFace} = useFlag()
 
-    
-    
     const navigateTo = (url) => {
     navigate(url)
     }
@@ -35,13 +30,11 @@ export const LandingPage = () => {
 
     const flag = (cIso)=>getFlagFace(cIso)
 
-    const mobile = useIsMobile()
+    const {isMobile, isBizerba} = useIsMobile()
     const ipInfo = useIp()
 
     React.useEffect(()=>{
-        console.log('landing ueff []', isMobile, mobile, ipInfo)
-        
-        setIsMobile(mobile)
+        console.log('landing ueff []', isMobile, isBizerba, ipInfo)
     },[])
 
     
@@ -70,26 +63,29 @@ export const LandingPage = () => {
        
 
        <div className="flex items-center justify-center w-full h-full">
-                <div className={`flex absolute top-8 w-5/12 h-[4rem] ${info} items-center justify-center px-4 gap-[3rem]`}>
+                <div className={`flex absolute top-8 w-7/12 h-[4rem] ${info} items-center justify-between px-4 gap-[3rem]`}>
                     {//isLoading?<h1>loading...</h1>:
-                    <div className="flex flex-row items-center justify-between gap-8">
+                    <div className="flex flex-row items-center justify-between gap-2 w-1/2">
                     <img 
-                    className="p-2 h-[5rem]"
+                    className="p-2 h-[3rem]"
                     src={ipInfo?flag(ipInfo.countryIso):''} />
                     
                     <span className="p-2 text-3xl font-semibold h-full">{ipInfo?.ip}</span>
-                    <span>{ipInfo?.timeZone}</span>
                     </div>
                     }
                 
                 
-                
-                  <OnLineSignal/>
+                <div className="flex flex-row items-center justify-end gap-[1rem] w-1/2">
+                    {isMobile && <i className="fas fa-mobile-screen"></i>}
+                    {isBizerba && <span><i className="fas fa-weight-scale mr-3"/>KH</span>}
+                    <OnLineSignal/>
+                </div>
+                  
                                 
                  </div>
 
 
-            <div className="flex flex-col items-center justify-center w-4/12 gap-8">
+            <div className="flex flex-col items-center justify-center w-4/12 gap-6">
                
                 
                 <button 
@@ -104,13 +100,13 @@ export const LandingPage = () => {
 
             
             <img 
-                className="absolute left-0 top-0 p-2 h-[3rem]"
+                className="absolute left-2 top-2  h-[15px]"
                 src='/bizerba-logo.png' />
 
 
         </div>
 
-        <div className={`w-full  h-[4rem]  py-[1rem] mt-2 bg-white bg-opacity-50 border border-purple-800 border-opacity-30 rounded-xl flex flex-row items-center justify-end px-3`}>
+        <div className={`w-full  h-[2rem]  py-[1rem] mt-2 bg-white bg-opacity-50 border border-purple-800 border-opacity-30 rounded-xl flex flex-row items-center justify-end px-3`}>
             <Timer/>
         </div>
 

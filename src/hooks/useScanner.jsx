@@ -45,7 +45,6 @@ let initialize = async () => {
     // Get all serial ports the user has previously granted the website access to.
     const ports = await navigator.serial.getPorts();
     console.log(ports);
-    let ActivePort
 
     const options = {
       baudRate: 9600,
@@ -113,6 +112,7 @@ let initialize = async () => {
             var nitem = {}
             //console.log('at end>>', scanned, scan)
             var it
+
             counter.current=counter.current+1
             let code = scanned.replace(/\W/g, "")
 
@@ -123,6 +123,8 @@ let initialize = async () => {
               processed:false,
               ...checkEan(code),
               }
+
+            console.log('port', port.current)
             setReaded(currentRead)
            
             //...searchProductInPriceListFromScannerReading(code)
@@ -227,12 +229,12 @@ let initialize = async () => {
     }
   
   const clearReaded = ()=>{
-    localStorage.setItem('readed', JSON.stringify({}))
+    setReaded({})
   }
   
 
   return (
-    {portInfo, initialize, isScannerOn, manualReading, readed, clearReaded}
+    {portInfo, port, initialize, isScannerOn, manualReading, readed, clearReaded}
   )
 }
 

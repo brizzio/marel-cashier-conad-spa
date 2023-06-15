@@ -23,7 +23,7 @@ export const AppLayout = ({
         }
       }, []);
     
-    const headerHeight = Math.floor(window.innerHeight * 0.05);
+    const headerHeight = '30px';
     
 
     function pixelsToRem(pixels) {    
@@ -41,9 +41,9 @@ export const AppLayout = ({
        backgroundPosition: 'center',
        backgroundRepeat: 'no-repeat', 
        backgroundSize: 'cover' }}>
-        <div className={`w-full h-[${pixelsToRem(headerHeight)}rem] py-[1rem] bg-white bg-opacity-90 border border-stone-100 rounded-xl flex flex-row items-center justify-between px-3 gap-2`}>
+        <div className={`w-full h-[${headerHeight}] py-[1rem] bg-white bg-opacity-90 border border-stone-100 rounded-xl flex flex-row items-center justify-between px-3 gap-2`}>
             <img 
-                className="h-[1.5rem]"
+                className="h-[15px]"
                 src='/bizerba-logo.png' />
             <div className={`flex gap-3`}>
                 <span>
@@ -57,13 +57,13 @@ export const AppLayout = ({
                 </span>
             </div>
         </div>
-        <div ref={div} className={`flex flex-col  h-full w-full  rounded drop-shadow-lg bg-white bg-opacity-20`}>
+        <div ref={div} className={`flex flex-col grow w-full  rounded drop-shadow-lg bg-white bg-opacity-20`}>
         
             {children}
 
         </div>
-        <div className={`w-full  h-[${pixelsToRem(headerHeight)}rem]  py-[1rem] mt-2 bg-white bg-opacity-50 border border-purple-800 border-opacity-30 rounded-xl flex flex-row items-center justify-end px-3`}>
-            <span>content height: {height}</span>
+        <div className={`w-full  h-[${headerHeight}] bg-white bg-opacity-50 border border-purple-800 border-opacity-30 rounded-xl flex flex-row items-center justify-end px-3`}>
+            {/* <span>content height: {height}</span> */}
             <Timer/>
         </div>
        </div>

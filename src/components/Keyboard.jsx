@@ -90,7 +90,7 @@ const Keyboard = () => {
 
     const qBtnClick = ()=>{
         if(!isQuantityButtonClicked){
-            setQuantityClass(`text-white w-fit bg-white/20`)
+            setQuantityClass(`text-white text-sm `)
             setQuantitybuttonTitle(confirmTitle)
             setIsQuantityButtonClicked(true)
             setScan({})
@@ -111,12 +111,12 @@ const Keyboard = () => {
 
 const btnClass = `w-full py-1.5 px-2 bg-white text-stone-800 text-3xl font-semibold rounded-lg shadow-md `
 
-const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-white':'bg-white text-stone-800'} text-3xl font-semibold rounded-lg shadow-md `
+const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-white':'bg-white text-stone-800'} text-lg font-semibold rounded-lg shadow-md `
 
   return (
     
         <div className="flex flex-col h-full gap-2 ">
-            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between`}>
+            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between p-3`}>
             <input  hidden ref={inputRef} className = 'text-black z-10' value={input} onChange={e => setInput(e.target.value)} />
                 <div  className={`w-full flex flex-row text-white text-4xl gap-3  items-center`}>
                     <span className={quantityClass}>{input}</span>
@@ -131,10 +131,10 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
                 </div>
             </div>
         
-        <div className="h-5/6 grid grid-flow-row grid-cols-3 grid-rows-5 gap-1.5">
+        <div className="h-4/6 grid grid-flow-row grid-cols-3 grid-rows-5 gap-1.5">
             <button className={qBtnClass} onClick={qBtnClick}>{quantityButtonTitle}</button>
             <button className={btnClass}>000</button>
-            <button className={btnClass}>BACK</button>
+            <button className={btnClass}><i className="fas fa-arrow-up-from-bracket text-stone-500"/></button>
             <button className={btnClass} onClick={handleKeyClick} value='7'>7</button>
             <button className={btnClass} onClick={handleKeyClick} value='8'>8</button>
             <button className={btnClass} onClick={handleKeyClick} value='9'>9</button>
@@ -145,7 +145,7 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
             <button className={btnClass} onClick={handleKeyClick} value='2'>2</button>
             <button className={btnClass} onClick={handleKeyClick} value='3'>3</button>
             <button className={`${ btnClass} col-span-2`} onClick={handleKeyClick}>0</button>
-            <button className={btnClass} onClick={handleClearInput}>CLEAR</button>
+            <button className={btnClass} onClick={handleClearInput}><i className="fas fa-delete-left text-stone-500"/></button>
         </div>
     
         </div>

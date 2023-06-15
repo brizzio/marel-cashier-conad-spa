@@ -1,15 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
 
 
 const useIsMobile = (breakpoint = 640) => {
   const checkForDevice = () => window.innerWidth < breakpoint;
+  const checkForScale = () => window.innerWidth == 800 && window.innerHeight==527
 
   const [isMobile, setIsMobile] = useState(checkForDevice());
+  const [isBizerba, setIsBizerba] = useState(checkForScale());
 
   useEffect(() => {
     const handlePageResized = () => {
       setIsMobile(checkForDevice());
+      setIsBizerba(checkForScale());
+
     };
 
     if (typeof window !== 'undefined') {
@@ -30,7 +35,7 @@ const useIsMobile = (breakpoint = 640) => {
   }, []);
 
   return {
-    isMobile,
+    isMobile,isBizerba
   };
 };
 

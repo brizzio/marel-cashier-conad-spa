@@ -25,10 +25,10 @@ export const CashierPage = () => {
 
     const swapBtnClass = ` h-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md `
 
-    const regularBtnClass = `bg-white text-stone-800 font-semibold 
-    border-2 border-teal-900 rounded-lg shadow-lg`
+    const regularBtnClass = `bg-white text-teal-900 font-semibold 
+    border border-teal-900 border-opacity-70 rounded-lg shadow-lg`
 
-    const largeBtnClass = `col-span-2  bg-white bg-opacity-90 text-teal-900 font-semibold border-2 border-teal-900 rounded-lg shadow-lg;`
+    const largeBtnClass = `col-span-2  bg-white bg-opacity-90 text-teal-900 font-semibold border border-teal-900 border-opacity-70 rounded-lg shadow-lg;`
 
     if(!isScannerOn) return <ScannerPrompt />
 
@@ -52,11 +52,11 @@ export const CashierPage = () => {
 
             </div>
             
-            <div className={`flex h-5/6 w-full mt-1 ${swap?'':'flex-row-reverse'}`}>
+            <div className={`flex h-full w-full mt-1 ${swap?'':'flex-row-reverse'}`}>
                
                 <div className="flex flex-col h-full w-5/12 gap-2 pr-2">
-                    <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-2 h-1/6">
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>FUNZ</button>
+                    <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-2 h-2/6">
+                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md py-2`}><i className="fas fa-2x fa-gears text-stone-400"/></button>
                     <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO VALORE</button>
                     <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO %</button>
                     <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>APERTURA CASSA</button>
@@ -66,10 +66,10 @@ export const CashierPage = () => {
                     <Keyboard />
                 </div>
                 <div className="h-full grid grid-flow-row grid-cols-4 grid-rows-7 gap-1 px-3 w-3/12">
-                    <button className={`${regularBtnClass}`}>CONTR. PREZZO ART</button>
-                    <button className={`${regularBtnClass}`}>RESO <br/> ART</button>
-                    <button className={`${regularBtnClass}`}>STORNO ART PRECEDENTE</button>
-                    <button className={`${regularBtnClass}`}>STORNO ULT ARTICOLO</button>
+                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-magnifying-glass text-stone-400"></i></button>
+                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-person-arrow-down-to-line text-stone-400"></i></button>
+                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-chevron-left text-stone-400"></i></button>
+                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-chevron-right text-stone-400"/></button>
 
                     <button className={`${largeBtnClass}`}>SHOP BIO PICCOLA</button>
                     <button className={`${largeBtnClass}`}>SHOP BIO GRANDE</button>
@@ -91,7 +91,7 @@ export const CashierPage = () => {
                     <button className={`${regularBtnClass}`}>P. CASSA</button>   
                 </div>
 
-                <div className="flex flex-col h-full w-4/12 py-1 gap-1">
+                <div className="flex flex-col h-full w-4/12  gap-1">
                     
                         
                         <div className={`w-full h-1/6 bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
@@ -104,8 +104,8 @@ export const CashierPage = () => {
 
                         <div className="h-1/6 grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
                             
-                            <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}>ESCI</button>
-                            <button className={`${regularBtnClass}`}>QUALCOSA</button>
+                            <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}><i className="fas fa-arrow-right-from-bracket fa-2x text-stone-500 fa-flip-horizontal"/></button>
+                            <button className={`${regularBtnClass}`}><i className="fa-regular fa-rectangle-list fa-2x text-stone-500"/></button>
                             <button className={`${largeBtnClass}`}>TOTALE</button>
                         </div> 
                 
