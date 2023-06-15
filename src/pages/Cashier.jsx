@@ -3,6 +3,8 @@ import { atom, useAtom } from 'jotai'
 import { useNavigate } from 'react-router-dom';
 import Keyboard from '../components/Keyboard';
 import useScanner from '../hooks/useScanner';
+import useCart from '../hooks/useCart';
+import BouncingDotsLoader from '../components/BouncingDotsLoader/BouncingDotsLoader';
 
 //https://www.kindacode.com/snippet/tailwind-css-make-a-child-element-fill-the-remaining-space/
 
@@ -10,12 +12,21 @@ import useScanner from '../hooks/useScanner';
 export const CashierPage = () => {
 
     const [swap, setSwap] = React.useState(false)
+    const [idle, setIdle] = React.useState(true)
 
     const navigate = useNavigate()
 
     const toggleSwap = () => setSwap(state => !state)
 
     const navigateToLogoutPage = ()=> navigate('/logout')
+
+    const {
+        newCart,
+        deleteCart,
+        currentCart
+    } = useCart()
+
+
     
     const { isScannerOn} = useScanner()
 
@@ -31,6 +42,22 @@ export const CashierPage = () => {
     const largeBtnClass = `col-span-2  bg-white bg-opacity-90 text-teal-900 font-semibold border border-teal-900 border-opacity-70 rounded-lg shadow-lg;`
 
     if(!isScannerOn) return <ScannerPrompt />
+
+    const startNewCart = () => {
+
+        console.log('newCart started')
+        newCart()
+        setIdle(false)
+
+    }
+
+    const cancelCurrentCart = () => {
+
+        console.log('current cart cancelled')
+        deleteCart()
+        setIdle(true)
+
+    }
 
 
     return(
@@ -56,14 +83,21 @@ export const CashierPage = () => {
                
                 <div className="flex flex-col h-full w-5/12 gap-2 pr-2">
                     <div className="grid grid-flow-row grid-cols-3 grid-rows-2 gap-2 h-2/6">
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md py-2`}><i className="fas fa-2x fa-gears text-stone-400"/></button>
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO VALORE</button>
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO %</button>
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>APERTURA CASSA</button>
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>RIST. SCONTRINI</button>
-                    <button className={`bg-white text-stone-800 font-thin rounded-lg shadow-md`}>RICUP. SCONTRINI</button>
+                    <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md py-2`}><i className="fas fa-2x fa-gears text-stone-400"/></button>
+                    <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO VALORE</button>
+                    <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO %</button>
+                    <button className={`${!idle
+                    ?'bg-green-200 text-teal-600 font-thin rounded-lg border-2 border-teal-600 border-opacity-10 px-2'
+                    :'bg-white/70 text-teal-600 font-thin rounded-lg border-2 border-teal-600 border-opacity-10'}`}
+                    disabled = {!idle}
+                    onClick={startNewCart}>{!idle?'CARRELLO ATTIVO':'NUOVO CLIENTE'}</button>
+                    <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md`}>RIST. SCONTRINI</button>
+                    <button className={`${!idle
+                    ?'bg-red-800 text-white font-thin rounded-lg border-2 border-red-600 border-opacity-10'
+                    :'bg-white/70 text-teal-600 font-thin rounded-lg border-2 border-teal-600 border-opacity-10'}`}
+                    onClick={cancelCurrentCart}>CANCELLA CARRELLO</button>
                     </div>
-                    <Keyboard />
+                    <Keyboard idle={idle}/>
                 </div>
                 <div className="h-full grid grid-flow-row grid-cols-4 grid-rows-7 gap-1 px-3 w-3/12">
                     <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-magnifying-glass text-stone-400"></i></button>
@@ -87,19 +121,19 @@ export const CashierPage = () => {
                     <button className={`${largeBtnClass}`}>CARNE</button>
 
                     <button className={`${largeBtnClass}`}>FRUTTA</button>
-                    <button className={`${regularBtnClass}`}>SACCH. BIO</button>
+                    <button className={`${regularBtnClass}`}>SAC. BIO</button>
                     <button className={`${regularBtnClass}`}>P. CASSA</button>   
                 </div>
 
                 <div className="flex flex-col h-full w-4/12  gap-1">
                     
-                        
-                        <div className={`w-full h-1/6 bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
-                            <div>TOTALE</div>
-                            <div>120,00</div>
+                    {!idle
+                    ?<>
+                    <div className={`w-full h-1/6 bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
+                        <div>TOTALE</div>
+                        <div>120,00</div>
                         </div>
                        
-
                         <div className="h-4/6 w-full border border-stone-600 rounded-lg bg-white bg-opacity-50"></div>
 
                         <div className="h-1/6 grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
@@ -107,7 +141,16 @@ export const CashierPage = () => {
                             <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}><i className="fas fa-arrow-right-from-bracket fa-2x text-stone-500 fa-flip-horizontal"/></button>
                             <button className={`${regularBtnClass}`}><i className="fa-regular fa-rectangle-list fa-2x text-stone-500"/></button>
                             <button className={`${largeBtnClass}`}>TOTALE</button>
-                        </div> 
+                        </div>
+                    
+                    </>
+                    :
+                    <div className="h-full w-full border border-stone-600 rounded-lg bg-white bg-opacity-50">
+                        <BouncingDotsLoader/>
+                    </div>
+                    }
+                        
+                         
                 
                 </div>
 

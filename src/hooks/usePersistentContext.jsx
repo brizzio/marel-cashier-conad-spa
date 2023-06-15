@@ -8,7 +8,7 @@ export default function usePersistentContext(key) {
     const { mutateAsync: setValue } = useMutation(
       
       (value) => {
-        console.log('mutate', value)
+        //console.log('mutate', value)
         localStorage.setItem(key, JSON.stringify(value))
       },
       {

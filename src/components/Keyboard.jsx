@@ -1,59 +1,59 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-extra-boolean-cast */
 /* eslint-disable react/prop-types */
 import React from 'react'
-import useScanner from '../hooks/useScanner';
 
-const Keyboard = () => {
+import BouncingDotsLoader from '../components/BouncingDotsLoader/BouncingDotsLoader'
+
+import useScannerData from '../hooks/useScannerData'
+
+
+const Keyboard = ({idle}) => {
 
     const defaultTitle = 'Q'
     const confirmTitle = 'CONFERMA'
-    const cn = `text-stone-400`
-
+   
     const [scan, setScan] = React.useState({})
     const [quantity, setQuantity] = React.useState(1)
     const [input, setInput] = React.useState('1')
     const [quantityButtonTitle, setQuantitybuttonTitle] = React.useState(defaultTitle)
     const [isQuantityButtonClicked, setIsQuantityButtonClicked] = React.useState(false)
-    const [quantityClass, setQuantityClass] = React.useState(cn)
-    
-    
+
+    const { 
+        currentRead, 
+        clearCurrentRead, 
+        updateCurrentRead 
+    } = useScannerData()
+   
+     
     const inputRef = React.useRef()
    
 
-    const { clearReaded, readed} = useScanner()
-
-
     React.useEffect(()=>{
-        console.log('kb readed changed', readed)
-        const gotReaded = JSON.stringify(readed) !== '{}'
-        if(!isQuantityButtonClicked && gotReaded) processReading(readed)
-        gotReaded && logNewReadingToStorage(readed) 
+        console.log('idle', idle)
+        console.log('kb readed changed', currentRead)
+        const gotReaded = JSON.stringify(currentRead) !== '{}'
+        if(!isQuantityButtonClicked && gotReaded) processReading()
+       
+    }, [currentRead, isQuantityButtonClicked])
 
-    }, [readed, isQuantityButtonClicked])
 
-
-    const processReading=(data)=>{
-        setScan(data)
+    const processReading=()=>{
+        setScan(currentRead)
         const updatedRead = {
-            ...data, 
             quantity:Number(quantity),
-            processed:true
+            
         }
         console.log('updatedRead',updatedRead)
+        updateCurrentRead(updatedRead)
         setInput(quantity)
         setQuantity(1)
         
     }
 
 
-    const logNewReadingToStorage = (data)=>{
-        
-        let existing = localStorage.getItem('readings')
-        existing = existing ? JSON.parse(existing) : []
-        localStorage.setItem("readings",JSON.stringify([...existing, data])); 
-        clearReaded()
-    }
+    
 
     /* React.useEffect(() =>{ 
     
@@ -90,19 +90,19 @@ const Keyboard = () => {
 
     const qBtnClick = ()=>{
         if(!isQuantityButtonClicked){
-            setQuantityClass(`text-white text-sm `)
+            
             setQuantitybuttonTitle(confirmTitle)
             setIsQuantityButtonClicked(true)
             setScan({})
             setInput('')
-            clearReaded()
+            clearCurrentRead()
             
             return;
         }
 
         setIsQuantityButtonClicked(false)
         setQuantitybuttonTitle(defaultTitle)
-        setQuantityClass(cn)
+        
         setQuantity(input)
        
         
@@ -111,24 +111,33 @@ const Keyboard = () => {
 
 const btnClass = `w-full py-1.5 px-2 bg-white text-stone-800 text-3xl font-semibold rounded-lg shadow-md `
 
-const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-white':'bg-white text-stone-800'} text-lg font-semibold rounded-lg shadow-md `
+const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-white text-lg':'bg-white text-stone-800 text-3xl'}  font-semibold rounded-lg shadow-md `
 
   return (
     
         <div className="flex flex-col h-full gap-2 ">
-            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between p-3`}>
-            <input  hidden ref={inputRef} className = 'text-black z-10' value={input} onChange={e => setInput(e.target.value)} />
-                <div  className={`w-full flex flex-row text-white text-4xl gap-3  items-center`}>
-                    <span className={quantityClass}>{input}</span>
-                    <span className='pb-1'>|</span>
-                    <span>{!!scan?scan.code:''}</span>
-                </div>
-                <div className={`absolute bottom-2 w-full h-fit flex flex-row text-white font-thin justify-between px-4 items-center`}>
-                    <span>{!!scan?scan.evaluationType: ''}</span>
-                    <span>{!!scan?scan.count: ''}</span>
-                    <span>{!!scan?scan.read_at: ''}</span>
 
-                </div>
+            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between p-3`}>
+                {!idle
+                ?<>
+                    <input  hidden ref={inputRef} className = 'text-black z-10' value={input} onChange={e => setInput(e.target.value)} />
+                    <div  className={`w-full flex flex-row text-white text-5xl gap-3  items-center`}>
+                        <span className={`${isQuantityButtonClicked?'text-white':'text-stone-400'}`}>{input}</span>
+                        <span className='pb-1'>|</span>
+                        <span>{!!scan?scan.code:''}</span>
+                    </div>
+                    <div className={`absolute bottom-2 w-full h-fit flex flex-row text-white font-thin justify-between px-4 items-center`}>
+                        <span>{!!scan?scan.evaluationType: ''}</span>
+                        <span>{!!scan?scan.count: ''}</span>
+                        <span>{!!scan?scan.read_at: ''}</span>
+
+                    </div>
+                 </>
+                :<BouncingDotsLoader/>
+                
+                
+            }
+           
             </div>
         
         <div className="h-4/6 grid grid-flow-row grid-cols-3 grid-rows-5 gap-1.5">
