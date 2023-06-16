@@ -5,6 +5,8 @@ import Keyboard from '../components/Keyboard';
 import useScanner from '../hooks/useScanner';
 import useCart from '../hooks/useCart';
 import BouncingDotsLoader from '../components/BouncingDotsLoader/BouncingDotsLoader';
+import useScannerData from '../hooks/useScannerData';
+
 
 //https://www.kindacode.com/snippet/tailwind-css-make-a-child-element-fill-the-remaining-space/
 
@@ -30,6 +32,7 @@ export const CashierPage = () => {
     
     const { isScannerOn} = useScanner()
 
+    const {clearCurrentRead} = useScannerData()
     
 
     const tabBtnClass = `h-full w-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
@@ -40,6 +43,7 @@ export const CashierPage = () => {
     border border-teal-900 border-opacity-70 rounded-lg shadow-lg`
 
     const largeBtnClass = `col-span-2  bg-white bg-opacity-90 text-teal-900 font-semibold border border-teal-900 border-opacity-70 rounded-lg shadow-lg;`
+    
 
     if(!isScannerOn) return <ScannerPrompt />
 
@@ -47,6 +51,7 @@ export const CashierPage = () => {
 
         console.log('newCart started')
         newCart()
+        clearCurrentRead()
         setIdle(false)
 
     }
@@ -55,6 +60,7 @@ export const CashierPage = () => {
 
         console.log('current cart cancelled')
         deleteCart()
+        clearCurrentRead()
         setIdle(true)
 
     }
@@ -100,8 +106,9 @@ export const CashierPage = () => {
                     <Keyboard idle={idle}/>
                 </div>
                 <div className="h-full grid grid-flow-row grid-cols-4 grid-rows-7 gap-1 px-3 w-3/12">
+                    <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}><i className="fas fa-arrow-right-from-bracket fa-2x text-stone-500 fa-flip-horizontal"/></button>
                     <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-magnifying-glass text-stone-400"></i></button>
-                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-person-arrow-down-to-line text-stone-400"></i></button>
+                   
                     <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-chevron-left text-stone-400"></i></button>
                     <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-chevron-right text-stone-400"/></button>
 
@@ -121,13 +128,13 @@ export const CashierPage = () => {
                     <button className={`${largeBtnClass}`}>CARNE</button>
 
                     <button className={`${largeBtnClass}`}>FRUTTA</button>
-                    <button className={`${regularBtnClass}`}>SAC. BIO</button>
-                    <button className={`${regularBtnClass}`}>P. CASSA</button>   
+                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-magnifying-glass text-stone-400"></i></button>
+                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-person-arrow-down-to-line text-stone-400"></i></button>   
                 </div>
 
                 <div className="flex flex-col h-full w-4/12  gap-1">
                     
-                    {!idle
+                    {!idle || currentCart?.active
                     ?<>
                     <div className={`w-full h-1/6 bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
                         <div>TOTALE</div>

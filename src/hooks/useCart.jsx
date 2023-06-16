@@ -81,8 +81,76 @@ const useCart = () => {
             count:0
         })
 
+       
+
       
       }
+
+      const insert = (item)=>{
+        let items = [...currentCart.items, item]
+        setCurrentCart({...currentCart, items:items})
+      }
+
+
+      const addReadedItem = (scan) =>{
+
+        
+        let quant = scan?.quantity
+        let item = scan?.item
+          console.log('quant', quant)
+          
+              makeItem(item, quant)
+              .then((res)=>{
+                 console.log('res',res, Array.isArray(res)?res.length:1)
+                 return Array.from(res).length==1
+                  ? [...currentCart.items, res[0]]
+                  : [...currentCart.items, ...res]
+              })
+              .then((newList)=>{
+                  console.log('newList',newList)
+                  const updatedCart = {
+                      ...currentCart,
+                      items: newList,
+                      count: newList.length,
+                      total: total(newList, 'calculated_price'),
+                      weight: sumWeight(newList)
+                  }
+                  console.log('updatedCart',updatedCart)
+                  setCurrentCart(updatedCart)
+              })
+         
+  }
+
+
+  function makeItem(i, q){
+
+    console.log('date', formattedDate, formattedTime)
+
+    return new Promise((resolve)=>{
+
+        let arr = []
+        for (let index = 0; index < q; index++) {
+        let el = {...i}
+        let pos = index + 1
+        let o = [pos,q].join("/")
+        
+        console.log('make item order', o)
+        el.entry_id = millis
+        el.uid=crypto.randomUUID()
+        el.deleted = false
+        el.date_added= formattedDate
+        el.time_added= formattedTime
+        el.index=pos
+        el.order = o
+        el.quantity= q
+        console.log('make item', el)
+        arr.push(el)
+
+        }
+
+        resolve(arr)
+    })
+}
 
       
     
@@ -109,7 +177,9 @@ const useCart = () => {
      }
             
     
-    const deleteCart = (e) => { if (window.confirm('Cancella il carrello?')) setCurrentCart({...currentCartModel}) }
+    const deleteCart = (e) => { 
+        if (window.confirm('Cancella il carrello?')) setCurrentCart({...currentCartModel}) 
+      }
 
     
     
@@ -213,7 +283,8 @@ const useCart = () => {
   return {
         newCart,
         deleteCart,
-        currentCart
+        currentCart,
+        addReadedItem
     }
    
   

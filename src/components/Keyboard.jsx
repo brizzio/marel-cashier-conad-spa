@@ -7,6 +7,7 @@ import React from 'react'
 import BouncingDotsLoader from '../components/BouncingDotsLoader/BouncingDotsLoader'
 
 import useScannerData from '../hooks/useScannerData'
+import useCart from '../hooks/useCart'
 
 
 const Keyboard = ({idle}) => {
@@ -15,72 +16,41 @@ const Keyboard = ({idle}) => {
     const confirmTitle = 'CONFERMA'
    
     const [scan, setScan] = React.useState({})
-    const [quantity, setQuantity] = React.useState(1)
+   
     const [input, setInput] = React.useState('1')
     const [quantityButtonTitle, setQuantitybuttonTitle] = React.useState(defaultTitle)
     const [isQuantityButtonClicked, setIsQuantityButtonClicked] = React.useState(false)
 
     const { 
         currentRead, 
-        clearCurrentRead, 
-        updateCurrentRead 
+        updateQuantity
     } = useScannerData()
+
+    const {currentCart} = useCart()
    
      
     const inputRef = React.useRef()
    
 
     React.useEffect(()=>{
-        console.log('idle', idle)
-        console.log('kb readed changed', currentRead)
-        const gotReaded = JSON.stringify(currentRead) !== '{}'
-        if(!isQuantityButtonClicked && gotReaded) processReading()
-       
-    }, [currentRead, isQuantityButtonClicked])
-
-
-    const processReading=()=>{
-        setScan(currentRead)
-        const updatedRead = {
-            quantity:Number(quantity),
-            
-        }
-        console.log('updatedRead',updatedRead)
-        updateCurrentRead(updatedRead)
-        setInput(quantity)
-        setQuantity(1)
         
-    }
-
-
-    
-
-    /* React.useEffect(() =>{ 
-    
-    
-    console.log('key eff obj',lastRead, isQuantityButtonClicked, waitForNewRead,input)
-
-    if(waitForNewRead){
-        setWaitForNewRead(false)
-        return;
-    }
-
-    if(!isQuantityButtonClicked ){
-
-        if(JSON.stringify(lastRead) !== '{}') return;
-        let c = lastRead.code
-        setCode(c)
-        const updatedRead = {...lastRead, quantity:Number(quantity)}
-        console.log('updatedRead',updatedRead)
-        setQuantity(1)
+        console.log('currentRead', currentRead)
        
-    }
-    },[lastRead, isQuantityButtonClicked, waitForNewRead, input, quantity]) */
+        setScan(currentRead)
+        setInput(currentRead?currentRead.quantity:1)
+        if( isQuantityButtonClicked){
+            
+            setIsQuantityButtonClicked(false)
+        }
+       
+    }, [currentRead])
+
 
     const handleKeyClick= (e)=>{
         //console.log(e)
         let str = input + e.target.value
         setInput(str)
+        updateQuantity(Number(str))
     }
 
     const handleClearInput= (e)=>{
@@ -88,25 +58,15 @@ const Keyboard = ({idle}) => {
         setInput('')
     }
 
-    const qBtnClick = ()=>{
-        if(!isQuantityButtonClicked){
-            
-            setQuantitybuttonTitle(confirmTitle)
+    const qBtnClick = ()=> {
+       
             setIsQuantityButtonClicked(true)
             setScan({})
             setInput('')
-            clearCurrentRead()
-            
-            return;
-        }
-
-        setIsQuantityButtonClicked(false)
-        setQuantitybuttonTitle(defaultTitle)
-        
-        setQuantity(input)
-       
-        
     }
+
+
+    
 
 
 const btnClass = `w-full py-1.5 px-2 bg-white text-stone-800 text-3xl font-semibold rounded-lg shadow-md `
@@ -118,9 +78,9 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
         <div className="flex flex-col h-full gap-2 ">
 
             <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between p-3`}>
-                {!idle
+                {!idle || currentCart?.active
                 ?<>
-                    <input  hidden ref={inputRef} className = 'text-black z-10' value={input} onChange={e => setInput(e.target.value)} />
+                    
                     <div  className={`w-full flex flex-row text-white text-5xl gap-3  items-center`}>
                         <span className={`${isQuantityButtonClicked?'text-white':'text-stone-400'}`}>{input}</span>
                         <span className='pb-1'>|</span>

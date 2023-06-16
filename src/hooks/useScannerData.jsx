@@ -4,13 +4,20 @@ import useScanner from './useScanner'
 import usePersistentContext from './usePersistentContext'
 import useTimeZoneDate from './useTimeZone'
 import usePrices from './usePrices'
+import useCart from './useCart'
 
+//'FBRSVD68P05G273N'
 
 const useScannerData = () => {
 
-  const { readed} = useScanner()
+  const { readed, clearReaded} = useScanner()
   const [currentRead, setCurrentRead] = usePersistentContext('currentRead')
+  
+ 
+  const quantity = React.useRef(null)
   const counter = React.useRef(0)
+
+  const { addReadedItem } = useCart()
 
   const {
     millis,
@@ -21,11 +28,31 @@ const useScannerData = () => {
 
   React.useEffect(()=>{
 
-    const gotReaded = JSON.stringify(readed) !== '{}'
-    if(gotReaded) evaluate().then(res=>setCurrentRead(res))
+    console.log('readed changed', readed)
+    const gotReaded = readed && JSON.stringify(readed) !== ''
+    if(gotReaded) evaluate().then(res=>{
+        if (res.found){
+            console.log('readed an product')
+            addReadedItem(res)
+        }
+        if (!res.found && res.isEan){
+            console.log('readed an product that is not in prices list')
+            res.error=true
+            res.errorMsg='Prodotto non existente. Mettere questro prodotto da parte. Non é possiblile includere nel carrello.'
+            
+        }
+        
+        setCurrentRead(res)
+        
+        quantity.current=null
+    })
 
+    return () =>clearReaded()
+    
 
   },[readed])
+
+  
 
   const evaluate = async () =>{
     console.log('new reading', readed)
@@ -36,22 +63,29 @@ const useScannerData = () => {
 
     return {
     code:readed, 
-    count:counter.current,
+    count:counter.current++,
     origin:'scanner',
     processed:false,
     ...checkEan(readed),
     ...item,
+    isFiscalCode:isValidFiscalCode(readed),
+    quantity:quantity.current?quantity.current:1,
     evaluated: true
     }
     
 
   }
 
+  const updateQuantity = (q)=> {
+    console.log('q', q)
+    quantity.current = q
+  }
+
 
   const searchProductInPriceListFromScannerReading = (code) =>{
-    const match = prices.filter(el => (el.upc == code))
+    const match = prices && prices.filter(el => (el.upc == code))
     //console.log('match', match)
-    if (match.length == 1) {
+    if (match?.length == 1) {
         //console.log('match', match[0])
         return {found:true, item:match[0]}
     }else{
@@ -61,7 +95,7 @@ const useScannerData = () => {
   }
 
 
-  function checkEan(eanCode) {
+  function checkEan(eanCode='') {
     let result = {
       read_id:millis,
       read_at:dateTime,
@@ -73,12 +107,12 @@ const useScannerData = () => {
       error:false,
       errorMsg:''
     }
-    eanCode = eanCode.trim();
-    if ([8,12,13,14].indexOf(eanCode.length) == -1 ) {
+    eanCode = eanCode?.trim();
+    if ([8,12,13,14].indexOf(eanCode?.length) == -1 ) {
       result.isEan=false
       result.error=true
-      result.errorMsg= eanCode.length + 'is an invalid number of digits'
-      result.digits = eanCode.length
+      result.errorMsg= eanCode?.length + 'is an invalid number of digits'
+      result.digits = eanCode?.length
       result.evaluationType='OTHER'
       return result; 
     }
@@ -126,9 +160,16 @@ const useScannerData = () => {
     setCurrentRead({})
 }
 
+//  ^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$
+
     function isValidBarcode(number) {
         const checkDigit = String(number).slice(0, -1).split('').reverse().reduce((sum, v, i) => sum + v * (i % 2 || 3), 0)*9%10
         return /^\d+$/.test(number) && String(checkDigit) === String(number).at(-1)
+    }
+
+    function isValidFiscalCode(string) {
+        
+        /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/.test(string)
     }
 
 
@@ -137,7 +178,8 @@ const useScannerData = () => {
     currentRead,
     clearCurrentRead,
     updateCurrentRead,
-    logNewReadingToStorage 
+    logNewReadingToStorage,
+    updateQuantity
   }
 }
 

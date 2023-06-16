@@ -17,17 +17,6 @@ const portInfo = useRef(null)
 
 
 
-
-/* useEffect(()=>{
-  console.log('use scanner initialized')
-    //if(!isScannerOn) initialize()
-  return ()=>{
-    console.log('use scanner unmount')
-   
-    setIsScannerOn(false)
-  }
-},[]) */
-
 let initialize = async () => {
     
     if (!hasSerial.current || isScannerOn) return; 
@@ -56,24 +45,26 @@ let initialize = async () => {
         console.log('we have an selected port, lets get it!!', ports[0]);
         
         port.current = ports[0];
+        console.log('selected is open', port.current)
       } else{
 
         console.log('we dont have any port selected, lets get one!!');
         port.current = await navigator.serial.requestPort();
-
+        
       }
       
     } catch (error) {
       console.log('error opening port!', error);
+      setIsScannerOn(false)
     }
     
-   
-    await port.current.open(options);
+    await port.current?.open(options);
+    
     
     //port.current = ActivePort
     setIsScannerOn(true)
     
-    console.log('Now we have an opened port ... ', port.current.getInfo());
+    console.log('Now we have an opened port ... ', port.current?.getInfo());
 
     await connect();
     
@@ -85,15 +76,18 @@ let initialize = async () => {
 
     // connect & listen to port messages
     //console.log(port.current.getInfo());
-    portInfo.current = port.current.getInfo()
+    portInfo.current = port.current?.getInfo()
     let scanned = '';
     let end = false
-    while (port.current.readable) {
+    while (port.current?.readable) {
       // Listen to data coming from the serial device.
+      //console.log('readable, isOpen', port.current.readable, port.current.IsOpen)
       const textDecoder = new TextDecoderStream();
       const readableStreamClosed = port.current.readable.pipeTo(textDecoder.writable);
       const reader = textDecoder.readable.getReader();
       
+      console.log('reader', reader)
+
       while (true) {
         const scan = await reader.read();
         
@@ -103,7 +97,7 @@ let initialize = async () => {
          if(end){
            
             let code = scanned.replace(/\W/g, "")
-            setReaded(code)
+            setReaded(scanned.replace(/\W/g, ""))
             scanned =''
             end=false
             //scan.done = true
@@ -113,12 +107,15 @@ let initialize = async () => {
           // Allow the serial port.current to be closed later.
           //console.log('done', scan.done);
           reader.releaseLock();
+  
           break;
         }
         // value is a string will be streaming here.
       }
     }
   };
+
+  
 
 
   
