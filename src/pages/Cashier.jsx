@@ -6,6 +6,7 @@ import useScanner from '../hooks/useScanner';
 import useCart from '../hooks/useCart';
 import BouncingDotsLoader from '../components/BouncingDotsLoader/BouncingDotsLoader';
 import useScannerData from '../hooks/useScannerData';
+import DisplayList from '../components/DisplayList';
 
 
 //https://www.kindacode.com/snippet/tailwind-css-make-a-child-element-fill-the-remaining-space/
@@ -136,24 +137,30 @@ export const CashierPage = () => {
                     
                     {!idle || currentCart?.active
                     ?<>
-                    <div className={`w-full h-1/6 bg-teal-800 row-span-2 col-span-3 flex items-center text-white rounded-xl shadow-lg px-3 gap-3`}>
-                        <div>TOTALE</div>
-                        <div>120,00</div>
-                        </div>
+                    <div className={`w-full h-1/6 row-span-2 col-span-3 flex items-start text-zync-800 gap-3`}>
+                        <DisplayTotals/>
+                    </div>
                        
-                        <div className="h-4/6 w-full border border-stone-600 rounded-lg bg-white bg-opacity-50"></div>
+                    <div className="h-4/6 w-full rounded-lg bg-white bg-opacity-70 overflow-y-auto [&::-webkit-scrollbar]:hidden max-h-[20.5rem] mb-2">
+                        <DisplayList/>
+                    </div>
 
                         <div className="h-1/6 grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
                             
                             <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}><i className="fas fa-arrow-right-from-bracket fa-2x text-stone-500 fa-flip-horizontal"/></button>
-                            <button className={`${regularBtnClass}`}><i className="fa-regular fa-rectangle-list fa-2x text-stone-500"/></button>
-                            <button className={`${largeBtnClass}`}>TOTALE</button>
+                            <button className={`${regularBtnClass}`}><i className="fa-regular fa-rectangle-list fa-2x text-stone-500 "/></button>
+                            <button className={`${largeBtnClass} bg-blue-100 px-8`}>CHIUDI CONTO</button>
                         </div>
                     
                     </>
                     :
-                    <div className="h-full w-full border border-stone-600 rounded-lg bg-white bg-opacity-50">
-                        <BouncingDotsLoader/>
+                    <div className="relative h-full w-full border border-stone-600 rounded-lg bg-white bg-opacity-50 mt-1"
+                    style={{backgroundImage: 'url(Supermarket.png)',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat', 
+                    backgroundSize: 'cover' }}>
+
+                    <button className={`${regularBtnClass} p-4 absolute bottom-0 m-2`} onClick={navigateToLogoutPage}><i className="fas fa-arrow-right-from-bracket fa-2x text-stone-500 fa-flip-horizontal"/></button>
                     </div>
                     }
                         
@@ -167,6 +174,41 @@ export const CashierPage = () => {
     )
     
     };
+
+
+    const DisplayTotals = () => {
+
+        const {currentCart} = useCart()
+        const itemsCount = currentCart?currentCart.count:0
+        const cartWeight = currentCart?currentCart.weight?.toFixed(2):"0.00"
+        const cartTotal = currentCart?currentCart.total?.toFixed(2):"0.00"
+
+
+        return(
+
+            <div className="flex h-[4.5rem] w-full items-center justify-between gap-2 ">
+
+                <div className="flex h-full w-fit  items-center justify-center rounded-xl bg-white shadow-xl">
+                    <i className="fas fa-lg fa-cart-arrow-down pl-1 "></i>
+                    <span className="text-3xl font-thin px-2 mb-2">{itemsCount}</span>
+                </div>
+
+                <div className="flex h-full px-2  rounded-xl bg-white shadow-xl w-fit  items-center justify-center">
+                    <i className="fas fa-weight-scale fa-lg pl-1"></i>
+                    <span className="text-2xl font-thin px-1 mb-1">{cartWeight}</span>
+                    <span className='text-sm'>Kg</span>
+                </div>
+
+                <div className="flex h-full border rounded-xl bg-teal-700 shadow-xl w-[9rem] items-center justify-start px-3 text-white mt-1 gap-2">
+                <span className="text-2xl font-bold pl-1 mb-2">€</span>
+                <span className="text-2xl font-thin mb-2 text-end  w-full">{cartTotal}</span>
+                </div>
+                
+            </div>
+         
+
+        )
+    }
 
     const ScannerPrompt = ()=>{
 

@@ -77,7 +77,7 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
     
         <div className="flex flex-col h-full gap-2 ">
 
-            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-white rounded-xl shadow-lg justify-between p-3`}>
+            <div className={`relative w-full h-2/6 bg-stone-600 row-span-2 col-span-3 flex flex-col text-stone-800 opacity-40 border border-2 rounded-xl shadow-lg justify-between p-3`}>
                 {!idle || currentCart?.active
                 ?<>
                     

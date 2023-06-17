@@ -97,7 +97,11 @@ let initialize = async () => {
          if(end){
            
             let code = scanned.replace(/\W/g, "")
-            setReaded(scanned.replace(/\W/g, ""))
+            let  read = {
+              id:crypto.randomUUID(),
+              code
+            }
+            setReaded(read)
             scanned =''
             end=false
             //scan.done = true
@@ -107,7 +111,6 @@ let initialize = async () => {
           // Allow the serial port.current to be closed later.
           //console.log('done', scan.done);
           reader.releaseLock();
-  
           break;
         }
         // value is a string will be streaming here.
@@ -120,7 +123,7 @@ let initialize = async () => {
 
   
   const clearReaded = ()=>{
-    setReaded('')
+    setReaded({})
   }
   
 

@@ -64,7 +64,7 @@ const useCart = () => {
     
 
     
-      const newCart = () =>{
+      const newCart = React.useCallback(() =>{
         console.log('create new cart', formattedDate, formattedTime)
         setCurrentCart({
             ...currentCartModel,
@@ -84,7 +84,7 @@ const useCart = () => {
        
 
       
-      }
+      })
 
       const insert = (item)=>{
         let items = [...currentCart.items, item]
@@ -92,9 +92,9 @@ const useCart = () => {
       }
 
 
-      const addReadedItem = (scan) =>{
+      const addReadedItem = React.useCallback((scan) =>{
 
-        
+        if (!currentCart) return;
         let quant = scan?.quantity
         let item = scan?.item
           console.log('quant', quant)
@@ -119,10 +119,10 @@ const useCart = () => {
                   setCurrentCart(updatedCart)
               })
          
-  }
+  })
 
 
-  function makeItem(i, q){
+  const makeItem = React.useCallback((i, q)=>{
 
     console.log('date', formattedDate, formattedTime)
 
@@ -150,11 +150,11 @@ const useCart = () => {
 
         resolve(arr)
     })
-}
+})
 
       
     
-    const removeItemByKey = (key) =>{
+    const removeItemByKey = React.useCallback((key) =>{
             
         var item = currentCart.items[key]
         console.log('to delete', item)
@@ -174,12 +174,12 @@ const useCart = () => {
     
         setCurrentCart(removedState)
     
-     }
+     })
             
     
-    const deleteCart = (e) => { 
+    const deleteCart = React.useCallback((e) => { 
         if (window.confirm('Cancella il carrello?')) setCurrentCart({...currentCartModel}) 
-      }
+      })
 
     
     
@@ -284,7 +284,8 @@ const useCart = () => {
         newCart,
         deleteCart,
         currentCart,
-        addReadedItem
+        addReadedItem,
+        removeItemByKey 
     }
    
   

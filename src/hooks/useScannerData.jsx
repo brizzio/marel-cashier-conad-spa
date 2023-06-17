@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import useScanner from './useScanner'
@@ -26,49 +27,22 @@ const useScannerData = () => {
 
   const prices = usePrices()
 
-  React.useEffect(()=>{
-
-    console.log('readed changed', readed)
-    const gotReaded = readed && JSON.stringify(readed) !== ''
-    if(gotReaded) evaluate().then(res=>{
-        if (res.found){
-            console.log('readed an product')
-            addReadedItem(res)
-        }
-        if (!res.found && res.isEan){
-            console.log('readed an product that is not in prices list')
-            res.error=true
-            res.errorMsg='Prodotto non existente. Mettere questro prodotto da parte. Non é possiblile includere nel carrello.'
-            
-        }
-        
-        setCurrentRead(res)
-        
-        quantity.current=null
-    })
-
-    return () =>clearReaded()
-    
-
-  },[readed])
-
   
-
   const evaluate = async () =>{
     console.log('new reading', readed)
     
-    let item = searchProductInPriceListFromScannerReading(readed)
+    let item = searchProductInPriceListFromScannerReading(readed.code)
 
     console.log('item', item)
 
     return {
-    code:readed, 
+    code:readed.code, 
     count:counter.current++,
     origin:'scanner',
     processed:false,
-    ...checkEan(readed),
+    ...checkEan(readed.code),
     ...item,
-    isFiscalCode:isValidFiscalCode(readed),
+    isFiscalCode:isValidFiscalCode(readed.code),
     quantity:quantity.current?quantity.current:1,
     evaluated: true
     }
@@ -147,10 +121,10 @@ const useScannerData = () => {
 
   const clearCurrentRead = () => setCurrentRead({})
 
-  const updateCurrentRead = (obj) =>{
+  const updateCurrentRead = React.useCallback((obj) =>{
     let updatedData = {...currentRead, ...obj}
     setCurrentRead(updatedData)
-  }
+  })
 
   const logNewReadingToStorage = ()=>{
         
@@ -171,6 +145,29 @@ const useScannerData = () => {
         
         /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/.test(string)
     }
+
+    React.useMemo(()=>{
+
+        console.log('readed changed', readed)
+        const gotReaded = JSON.stringify(readed) !== {}
+        if(gotReaded) evaluate().then(res=>{
+            if (res.found){
+                console.log('readed an product')
+                addReadedItem(res)
+            }
+            if (!res.found && res.isEan){
+                console.log('readed an product that is not in prices list')
+                res.error=true
+                res.errorMsg='Prodotto non existente. Mettere questro prodotto da parte. Non é possiblile includere nel carrello.'
+                
+            }
+            
+            setCurrentRead(res)
+            
+            quantity.current=null
+        })
+    
+      },[readed])
 
 
 
