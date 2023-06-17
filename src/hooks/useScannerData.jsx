@@ -31,18 +31,18 @@ const useScannerData = () => {
   const evaluate = async () =>{
     console.log('new reading', readed)
     
-    let item = searchProductInPriceListFromScannerReading(readed.code)
+    let item = searchProductInPriceListFromScannerReading(readed?.code)
 
     console.log('item', item)
 
     return {
-    code:readed.code, 
+    code:readed?.code, 
     count:counter.current++,
     origin:'scanner',
     processed:false,
-    ...checkEan(readed.code),
+    ...checkEan(readed?.code),
     ...item,
-    isFiscalCode:isValidFiscalCode(readed.code),
+    isFiscalCode:isValidFiscalCode(readed?.code),
     quantity:quantity.current?quantity.current:1,
     evaluated: true
     }
