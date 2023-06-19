@@ -25,7 +25,7 @@ export const LandingPage = () => {
 
     const startCashier = ()=>{
        // initialize()
-        navigateTo("/cashier")
+        navigateTo("/app")
     }
 
     const flag = (cIso)=>getFlagFace(cIso)

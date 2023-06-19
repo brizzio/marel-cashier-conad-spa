@@ -1,15 +1,17 @@
 import React from 'react';
-import { atom, useAtom } from 'jotai'
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import Keyboard from '../components/Keyboard';
 import useScanner from '../hooks/useScanner';
 import useCart from '../hooks/useCart';
-import BouncingDotsLoader from '../components/BouncingDotsLoader/BouncingDotsLoader';
 import useScannerData from '../hooks/useScannerData';
 import DisplayList from '../components/DisplayList';
 
 
 //https://www.kindacode.com/snippet/tailwind-css-make-a-child-element-fill-the-remaining-space/
+
+//Managing state with React Query.
+//https://dev.to/franklin030601/managing-state-with-react-query-1842
 
 
 export const CashierPage = () => {
@@ -34,6 +36,8 @@ export const CashierPage = () => {
     const { isScannerOn} = useScanner()
 
     const {clearCurrentRead} = useScannerData()
+
+    const newCartClicked = React.useRef(false)
     
 
     const tabBtnClass = `h-full w-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
@@ -54,6 +58,7 @@ export const CashierPage = () => {
         newCart()
         clearCurrentRead()
         setIdle(false)
+        newCartClicked.current = true
 
     }
 
@@ -63,6 +68,8 @@ export const CashierPage = () => {
         deleteCart()
         clearCurrentRead()
         setIdle(true)
+        newCartClicked.current = false
+
 
     }
 
@@ -93,14 +100,14 @@ export const CashierPage = () => {
                     <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md py-2`}><i className="fas fa-2x fa-gears text-stone-400"/></button>
                     <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO VALORE</button>
                     <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md`}>SCONTO %</button>
-                    <button className={`${!idle
+                    <button className={`${currentCart && currentCart.active
                     ?'bg-green-200 text-teal-600 font-thin rounded-lg border-2 border-teal-600 border-opacity-10 px-2'
                     :'bg-white/70 text-teal-600 font-thin rounded-lg border-2 border-teal-600 border-opacity-10'}`}
-                    disabled = {!idle}
-                    onClick={startNewCart}>{!idle?'CARRELLO ATTIVO':'NUOVO CLIENTE'}</button>
+                    disabled = {currentCart && currentCart.active}
+                    onClick={startNewCart}>{currentCart && currentCart.active?'CARRELLO ATTIVO':'NUOVO CLIENTE'}</button>
                     <button className={`bg-white/90 text-stone-800 font-thin rounded-lg shadow-md`}>RIST. SCONTRINI</button>
-                    <button className={`${!idle
-                    ?'bg-red-800 text-white font-thin rounded-lg border-2 border-red-600 border-opacity-10'
+                    <button className={`${currentCart && currentCart.active
+                    ?'bg-red-400 opacity-80 text-white font-thin rounded-lg border-2 border-red-600 border-opacity-10'
                     :'bg-white/70 text-teal-600 font-thin rounded-lg border-2 border-teal-600 border-opacity-10'}`}
                     onClick={cancelCurrentCart}>CANCELLA CARRELLO</button>
                     </div>
@@ -138,11 +145,11 @@ export const CashierPage = () => {
                     {!idle || currentCart?.active
                     ?<>
                     <div className={`w-full h-1/6 row-span-2 col-span-3 flex items-start text-zync-800 gap-3`}>
-                        <DisplayTotals/>
+                        <DisplayTotals cart={currentCart}/>
                     </div>
                        
                     <div className="h-4/6 w-full rounded-lg bg-white bg-opacity-70 overflow-y-auto [&::-webkit-scrollbar]:hidden max-h-[20.5rem] mb-2">
-                        <DisplayList/>
+                        <DisplayList items={currentCart?.items}/>
                     </div>
 
                         <div className="h-1/6 grid grid-flow-row grid-cols-4 grid-rows-1 gap-1.5">
@@ -176,12 +183,12 @@ export const CashierPage = () => {
     };
 
 
-    const DisplayTotals = () => {
+    const DisplayTotals = ({cart}) => {
 
-        const {currentCart} = useCart()
-        const itemsCount = currentCart?currentCart.count:0
-        const cartWeight = currentCart?currentCart.weight?.toFixed(2):"0.00"
-        const cartTotal = currentCart?currentCart.total?.toFixed(2):"0.00"
+        
+        const itemsCount = cart.count
+        const cartWeight = cart.weight
+        const cartTotal = cart.total
 
 
         return(
@@ -195,20 +202,37 @@ export const CashierPage = () => {
 
                 <div className="flex h-full px-2  rounded-xl bg-white shadow-xl w-fit  items-center justify-center">
                     <i className="fas fa-weight-scale fa-lg pl-1"></i>
-                    <span className="text-2xl font-thin px-1 mb-1">{cartWeight}</span>
+                    <span className="text-2xl font-thin px-1 mb-1">{cartWeight.toFixed(2)}</span>
                     <span className='text-sm'>Kg</span>
                 </div>
 
                 <div className="flex h-full border rounded-xl bg-teal-700 shadow-xl w-[9rem] items-center justify-start px-3 text-white mt-1 gap-2">
                 <span className="text-2xl font-bold pl-1 mb-2">€</span>
-                <span className="text-2xl font-thin mb-2 text-end  w-full">{cartTotal}</span>
+                <span className="text-2xl font-thin mb-2 text-end  w-full">{cartTotal.toFixed(2)}</span>
                 </div>
                 
             </div>
          
 
         )
+
     }
+
+    DisplayTotals.propTypes = {
+        cart: PropTypes.shape({
+          count: PropTypes.number,
+          weight: PropTypes.number,
+          total: PropTypes.number,
+        })
+      }
+    
+    DisplayTotals.defaultProps = {
+        cart: {
+          count: 0,
+          weight: 0,
+          total: 0,
+        }
+      }
 
     const ScannerPrompt = ()=>{
 

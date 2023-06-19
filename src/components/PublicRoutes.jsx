@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 import {Navigate, Outlet} from 'react-router-dom'
 
@@ -15,7 +15,7 @@ const  PublicRoutes=() =>{
 
   const auth=useAuth()
 
-  return auth?<Navigate to="/dashboard"/>: <Outlet/>
+  return auth?<Navigate to="/app"/>: <Outlet/>
 }
 
 export default PublicRoutes;

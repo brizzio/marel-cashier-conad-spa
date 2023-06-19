@@ -66,14 +66,9 @@ RenderListItem.propTypes = {
 
 
 
-const DisplayList = () => {
+const DisplayList = ({items}) => {
 
   
-
-    const {currentCart} = useCart()
-
-//console.log('DisplayList current cart', currentCart)
-   
 
   return (
     
@@ -90,9 +85,9 @@ const DisplayList = () => {
 
            
             {
-                JSON.stringify(currentCart?.items)!== '[]'
+                JSON.stringify(items)!== '[]'
                 ?<div id="table-body" className='flex flex-col  p-2'>
-                {currentCart?.items?.filter((i)=>!i.deleted).map(function(i, idx){
+                {items?.filter((i)=>!i.deleted).map(function(i, idx){
                     return (<RenderListItem key={idx} index={idx} item={i} />)
                 })}
                 </div>
@@ -110,7 +105,7 @@ const DisplayList = () => {
 
 DisplayList.propTypes = {
     item:PropTypes.object,
-    currentCart:PropTypes.object
+    items:PropTypes.array
 }
 
 

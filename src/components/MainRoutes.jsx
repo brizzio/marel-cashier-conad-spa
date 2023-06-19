@@ -14,18 +14,22 @@ import PublicRoutes from './PublicRoutes';
 
 
 
+
+
+
 const MainRoutes = () => ( 
  
       <Routes>
         {/** Protected Routes */}
-        {/** Wrap all Route under ProtectedRoutes element */}
+        {/** Wrap all Route under ProtectedRoutes element 
+         * <Route index element={<Navigate replace to="dashboard" />}/>
+        */}
         <Route index element={<LandingPage />} />
-        <Route path="/" element={<ProtectedRoutes/>}>
-          
-            <Route path="/" element={<Navigate replace to="dashboard" />}/>
-            <Route path="dashboard" element={<DashboardPage/>}/>
-            <Route path="cashier" element={<CashierPage/>}/>
-            <Route path="logout" element={<LogoutPage/>}/>
+        <Route path="landing" element={<LandingPage />} />
+        <Route  element={<ProtectedRoutes/>}>
+            <Route path="app" element={<DashboardPage/>}/>
+            <Route path="app/cashier" element={<CashierPage/>}/>
+            <Route path="app/logout" element={<LogoutPage/>}/>
                               
              {/* <Route path="settings" element={<Settings/>}/>            
              <Route path="users" element={<Users extraItem="test extra item from router"/>}/>            
@@ -37,10 +41,11 @@ const MainRoutes = () => (
         
          {/** Public Routes */}
         {/** Wrap all Route under PublicRoutes element */}
-        <Route path="login" element={<PublicRoutes/>}>
+        <Route element={<PublicRoutes/>}>
           <Route path="/login" element={<Login/>}/>
 
         </Route>
+        <Route path="*" element={<p>nothing here: 404!</p>} />
       </Routes>
 
      

@@ -7,7 +7,7 @@ const  Login=() =>{
 
   const login=()=>{
     localStorage.setItem('user','test')
-    navigate('/cashier')
+    navigate('/app')
   }
 
   return <div className='login'>
