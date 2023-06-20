@@ -7,6 +7,7 @@ import Login from '../pages/Login';
 import { LogoutPage } from '../pages/Logout';
 import { CashierPage } from '../pages/Cashier';
 import { DashboardPage } from '../pages/Dashboard';
+import OpenCashier from './Cashier/OpenCashier';
 import { LandingPage } from '../pages/Landing';
 
 import ProtectedRoutes from './ProtectedRoutes';
@@ -27,7 +28,7 @@ const MainRoutes = () => (
         <Route index element={<LandingPage />} />
         <Route path="landing" element={<LandingPage />} />
         <Route  element={<ProtectedRoutes/>}>
-            <Route path="app" element={<DashboardPage/>}/>
+            <Route path="app" element={<OpenCashier/>}/>
             <Route path="app/cashier" element={<CashierPage/>}/>
             <Route path="app/logout" element={<LogoutPage/>}/>
                               

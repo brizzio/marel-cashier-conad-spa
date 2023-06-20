@@ -29,6 +29,7 @@ const useScannerData = () => {
 
   
   const evaluate = async () =>{
+    
     console.log('new reading', readed)
     
     let item = searchProductInPriceListFromScannerReading(readed?.code)
@@ -146,12 +147,15 @@ const useScannerData = () => {
         /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/.test(string)
     }
 
-    React.useMemo(()=>{
+    React.useEffect(()=>{
 
-        console.log('readed changed', readed)
-        const gotReaded = JSON.stringify(readed) !== {}
+        console.log('readed changed', readed, JSON.stringify(readed)  !== '{}')
+        const gotReaded = JSON.stringify(readed)  !== '{}'
         if(gotReaded) evaluate().then(res=>{
-            if (res.found){
+          
+          console.log('res',res)
+          
+          if (res.found){
                 console.log('readed an product')
                 addReadedItem(res)
             }

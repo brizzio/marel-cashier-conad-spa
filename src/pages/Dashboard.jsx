@@ -5,6 +5,7 @@ import { useDevice } from '../hooks/useDevice';
 import useCashInventory from '../hooks/useCashInventory';
 import DisplayBalance from '../components/DisplayBalance';
 import MapBox from '../components/MapBox';
+import useIntl from '../hooks/useIntl';
 
 
 
@@ -21,7 +22,7 @@ export const DashboardPage = () => {
     }
 
     const {did} = useDevice()
-    const {balance} = useCashInventory()
+    const {balance, total} = useCashInventory()
 
     //const { initialize } = useScanner()
 
@@ -30,25 +31,49 @@ export const DashboardPage = () => {
         navigateTo("cashier")
     }
 
-    const tabBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
+    const formatter = useIntl()
 
-    const swapBtnClass = ` py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md `
+    const tabBtnClass = `w-full py-4 px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md`
 
-    const regularBtnClass = `bg-white text-stone-800 font-semibold 
-    border-2 border-teal-900 rounded-lg shadow-lg`
+    const btnInventory = {
+        title:'fondo cassa',
+        classes:tabBtnClass,
+        action:(state)=>{
+            state
+            ?console.log('btnInventory clicked')
+            :console.log('unclicked')
+        },
+        
+    }
 
-    const largeBtnClass = `col-span-2  bg-white bg-opacity-90 text-teal-900 font-semibold border-2 border-teal-900 rounded-lg shadow-lg;`
+    const btnContinue = {
+        title:'segui',
+        classes:tabBtnClass,
+        action:(state)=>{
+            state
+            ?console.log('btnContinue clicked')
+            :console.log('btnContinue unclicked')
+        },
+        
+    }
+
 
     
-
     return(
         <div className="flex items-center justify-between w-full h-full">
             
-            <div  className="flex flex-col grow h-full items-center justify-center">
+            <div  className="flex flex-col grow h-full items-center justify-center gap-3">
                     
                     <DisplayInfo info={did}/>
-                    
-                   <DisplayBalance items={balance}/>
+                <div>
+                    <p>NEGOZIO</p>
+                    <p>{did?.store_id}</p>
+                </div>
+                <div>
+                    <p>SALDO CASSA</p>
+                    <p>{formatter.currency(total)}</p>
+                </div>
+                   
                     
 
 
@@ -58,13 +83,13 @@ export const DashboardPage = () => {
 
                 </div>
                 
-                <div className="flex flex-col items-center justify-center grow">
+                <div className="flex flex-col items-center justify-center grow gap-3">
 
-                        <button
-                            className={`${tabBtnClass}`}
-                            onClick={startCashier}
-                        >StartCashier</button>
-                    </div>
+                   <ActionButton config={btnInventory}/>
+                   <ActionButton config={btnContinue}/>
+
+                           
+                </div>
             
         </div>
             
@@ -73,6 +98,35 @@ export const DashboardPage = () => {
     )
     
     };
+
+
+    const ActionButton = ({config})=>{
+
+        const {
+            title,
+            classes,
+            action
+        } = config
+
+        const [clicked, setClicked] = React.useState(false)
+
+        const click = () =>{
+            setClicked(!clicked)
+            action(!clicked)
+        }
+
+        const styles = clicked
+        ?`${classes} border border-2 border-teal-800`
+        :classes
+
+        return (
+          <button
+            className={styles}
+            onClick={click}
+          >{title.toUpperCase()}</button>
+
+        )
+    }
 
     const DisplayInfo = ({info}) =>{
 

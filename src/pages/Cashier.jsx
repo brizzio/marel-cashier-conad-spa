@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import Keyboard from '../components/Keyboard';
-import useScanner from '../hooks/useScanner';
 import useCart from '../hooks/useCart';
 import useScannerData from '../hooks/useScannerData';
 import DisplayList from '../components/DisplayList';
@@ -33,7 +32,7 @@ export const CashierPage = () => {
 
 
     
-    const { isScannerOn} = useScanner()
+    
 
     const {clearCurrentRead} = useScannerData()
 
@@ -50,7 +49,7 @@ export const CashierPage = () => {
     const largeBtnClass = `col-span-2  bg-white bg-opacity-90 text-teal-900 font-semibold border border-teal-900 border-opacity-70 rounded-lg shadow-lg;`
     
 
-    if(!isScannerOn) return <ScannerPrompt />
+    
 
     const startNewCart = () => {
 
@@ -162,7 +161,7 @@ export const CashierPage = () => {
                     </>
                     :
                     <div className="relative h-full w-full border border-stone-600 rounded-lg bg-white bg-opacity-50 mt-1"
-                    style={{backgroundImage: 'url(Supermarket.png)',
+                    style={{backgroundImage: 'url(/Supermarket.png)',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat', 
                     backgroundSize: 'cover' }}>
@@ -234,7 +233,7 @@ export const CashierPage = () => {
         }
       }
 
-    const ScannerPrompt = ()=>{
+   /*  const ScannerPrompt = ()=>{
 
         const textPromptClass = `w-1/2 h-3/6 text-3xl font-thin text-teal-800`
 
@@ -257,7 +256,7 @@ export const CashierPage = () => {
 
         )
 
-   }
+   } */
      /* <>
       
         */

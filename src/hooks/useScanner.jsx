@@ -19,7 +19,7 @@ const portInfo = useRef(null)
 
 let initialize = async () => {
     
-    if (!hasSerial.current || isScannerOn) return; 
+    if (!hasSerial.current) return; 
 
        
 
@@ -93,6 +93,7 @@ let initialize = async () => {
         
          end = (JSON.stringify(scan).indexOf('r')>-1)
          scanned = scanned + scan.value
+         console.log('scan',scan)
          
          if(end){
            

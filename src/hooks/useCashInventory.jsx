@@ -4,7 +4,8 @@ import usePersistentContext from './usePersistentContext'
 const useCashInventory = () => {
 
     const key = 'inventory'
-    const [inventory, setInventory] = usePersistentContext(key)
+    const [inventory=[], setInventory] = usePersistentContext(key)
+    const [total, setTotal] = React.useState(0)
   
     React.useEffect(() => {
       let existing = localStorage.getItem(key)
@@ -14,12 +15,28 @@ const useCashInventory = () => {
       }
     }, []);
 
-    const balance = inventory?.filter(el => {
+    const balance = inventory.filter(el => {
         return el.quantity > 0;
       });
 
+    React.useMemo(()=>{
+
+       let sum = inventory.reduce((a,el)=>{
+            let val = Number(el.value) * Number(el.quantity)
+            console.log(val)
+            return a + val
+        },0)
+
+        setTotal(sum)
+
+    }, [inventory])
+
+   
+  
+
   return {
-    balance
+    balance,
+    total
   }
 }
 
@@ -40,10 +57,10 @@ let inventoryDefaultData = [
     {type:'coin', face:'2€' ,value:2 ,quantity:100},
     {type:'coin', face:'1€' ,value:1 , quantity:100},
     {type:'coin', face:'50C', value:0.5, quantity:100},
-    {type:'coin', face:'25C', value:0.25 , quantity:100},
     {type:'coin', face:'20C', value:0.20 , quantity:100},
     {type:'coin', face:'10C', value:0.10 , quantity:100},
-    {type:'coin', face:'5C' ,value:0.05 , quantity:100 },        
+    {type:'coin', face:'5C' ,value:0.05 , quantity:100 },
+    {type:'coin', face:'2C', value:0.2 , quantity:100},        
     {type:'coin', face:'1C' ,value:0.01 , quantity:100 },     
      ]
 
