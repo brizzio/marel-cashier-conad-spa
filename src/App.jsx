@@ -12,7 +12,7 @@ function App() {
 
   React.useEffect(()=>{
     console.log('application started')
-    //navigate('/landing')
+    navigate('/landing')
     return ()=>{
       console.log('application will shut down')
     }

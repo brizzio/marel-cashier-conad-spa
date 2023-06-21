@@ -14,20 +14,18 @@ const usePrices = () => {
   
   const {get} = useApi()
 
-  React.useEffect(() => {
-    let existing = localStorage.getItem(key)
-    if(!existing && !prices) init()
-    
-    return () => console.log('prices unmount')
-    
-  }, []);
+  
 
   const init = async () => {
     const response = await get('priceList')
     setPrices(response);
   };
 
-  
+  React.useMemo(() => {
+    let existing = localStorage.getItem(key)
+    if(!existing ) init()
+    
+  }, []);
 
 
   return prices

@@ -18,6 +18,7 @@ const queryClient = new QueryClient({
       // which indicates a failed background update
       if (query.state.data !== undefined) {
         console.log(`Something went wrong: ${error.message}`)
+        console.log(`query.state: ${query.state}`)
       }
     },
   }),

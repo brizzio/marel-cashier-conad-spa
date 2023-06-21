@@ -147,7 +147,7 @@ const useScannerData = () => {
         /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/.test(string)
     }
 
-    React.useEffect(()=>{
+    React.useMemo(()=>{
 
         console.log('readed changed', readed, JSON.stringify(readed)  !== '{}')
         const gotReaded = JSON.stringify(readed)  !== '{}'
@@ -165,8 +165,9 @@ const useScannerData = () => {
                 res.errorMsg='Prodotto non existente. Mettere questro prodotto da parte. Non é possiblile includere nel carrello.'
                 
             }
-            
+            res.processed = true
             setCurrentRead(res)
+            clearReaded()
             
             quantity.current=null
         })

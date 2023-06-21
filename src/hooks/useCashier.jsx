@@ -4,10 +4,13 @@ import React from 'react'
 import useScanner from './useScanner'
 import { useNavigate } from 'react-router-dom'
 import usePersistentContext from './usePersistentContext'
+import useCashInventory from './useCashInventory'
+import useTimeZoneDate from './useTimeZone'
+import useSessions from './useSessions'
 
 
 let cashierModel = {
-    session_id:crypto.randomUUID(),
+    
     is_active:false,
     did:'',
     company:'',
@@ -46,40 +49,86 @@ const useCashier = () => {
     const cashierCloseMessage = "Inizio della chiusura del cassa... Vuoi continuare?"
 
     const {initialize} = useScanner()
+    //const {inventory } = useCashInventory()
+
+    const {save} = useSessions()
+
+    const {
+        
+        formattedDate,
+        formattedTime,
+         
+      } = useTimeZoneDate()
 
     const navigate = useNavigate()
 
+    const getInventory =()=>JSON.parse(localStorage.getItem('inventory'))
+
     const openCashier = React.useCallback(() => {
-        setCashier({...cashierModel, is_active:true})
+        setCashier({
+            ...cashierModel, 
+            session_id:crypto.randomUUID(),
+            is_active:true,
+            open_date:formattedDate,
+            open_time:formattedTime,
+            inventory_on_start:getInventory()
+        })
         initialize()
         navigate('cashier')
     })
 
     const closeCashier = React.useCallback(() => { 
 
-        if(cashier 
-            && cashier.is_active 
-            && !cashier.carts.lenght)
-        if (window.confirm(emptyCashierDeleteMessage)) setCashier(null) 
+        console.log('closeCashier',cashier 
+        && cashier.is_active 
+        && !cashier.carts.length,
+         
+        cashier.is_active ,
+        cashier.carts.length
+        
+        )
 
         if(cashier 
             && cashier.is_active 
-            && cashier.carts.lenght)
-        if (window.confirm(cashierCloseMessage)) setCashier({
-            ...cashierModel, 
-            is_active:false,
-            is_closed:true
-        })
+            && !cashier.carts.length)
+            if (window.confirm(emptyCashierDeleteMessage)) setCashier(null) 
+
+        if(cashier 
+            && cashier.is_active 
+            && cashier.carts.length)
+            if (window.confirm(cashierCloseMessage)) {
+                let session = {
+                    ...cashier, 
+                    is_active:false,
+                    is_closed:true,
+                    close_date:formattedDate,
+                    close_time:formattedTime,
+                    inventory_on_end:getInventory()
+                    
+                }
+                console.log('session', session)
+                save(session)
+                setCashier(cashierModel)
+
+
+            }//close if window confirm
+
+
 
     },[cashier])
 
-    const updateCashier = (obj) => setCashier({...cashierModel, ...obj})
+    const updateCashier = (obj) => setCashier({...cashier, ...obj})
 
+    const insertCart = React.useCallback((cart) => {
+        let updatedCarts = [...cashier.carts, cart]
+        setCashier({...cashier, carts:updatedCarts})
+    })
 
   return {
     openCashier,
     closeCashier,
     updateCashier,
+    insertCart,
     cashier
     
     }

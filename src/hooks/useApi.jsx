@@ -33,7 +33,7 @@ function get(table) {
         },
       })
       .then((res) => {
-        console.log('res.data', res.data)
+        //console.log('res.data', res.data)
         return resolve(res.data);
       })
       .catch((err) => {

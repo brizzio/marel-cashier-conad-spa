@@ -19,14 +19,14 @@ const useTimeZoneDate = () => {
 
         let objectDate =  {
             tz,
-            millis:new Date( dt[2], dt[1]-1, dt[0], tm[0], tm[1], tm[2]).getTime() + millis,
-            dateTime: formatDate(dt[2], dt[1]-1, dt[0]) + "T" + formatTime(tm[0], tm[1], tm[2]),
-            formattedDate:formatDate(dt[2], dt[1]-1, dt[0]),
+            millis:new Date( dt[2], dt[1], dt[0], tm[0], tm[1], tm[2]).getTime() + millis,
+            dateTime: formatDate(dt[2], dt[1], dt[0]) + "T" + formatTime(tm[0], tm[1], tm[2]),
+            formattedDate:formatDate(dt[2], dt[1], dt[0]),
             formattedTime:formatTime(tm[0], tm[1], tm[2]),
-            array: [dt[2], dt[1]-1, dt[0], tm[0], tm[1], tm[2]],
-            numeric:new Date( dt[2], dt[1]-1, dt[0], tm[0], tm[1], tm[2]).getTime(),
+            array: [dt[2], dt[1], dt[0], tm[0], tm[1], tm[2]],
+            numeric:new Date( dt[2], dt[1], dt[0], tm[0], tm[1], tm[2]).getTime(),
             timestamp:dt[2]
-            + padTo2Digits(dt[1]-1)
+            + padTo2Digits(dt[1])
             + padTo2Digits(dt[0]) 
             + padTo2Digits(tm[0]) 
             + padTo2Digits(tm[1]) 

@@ -53,12 +53,14 @@ let initialize = async () => {
         
       }
       
+      await port.current?.open(options);
+
     } catch (error) {
       console.log('error opening port!', error);
-      setIsScannerOn(false)
+      
     }
     
-    await port.current?.open(options);
+    
     
     
     //port.current = ActivePort
@@ -66,7 +68,12 @@ let initialize = async () => {
     
     console.log('Now we have an opened port ... ', port.current?.getInfo());
 
-    await connect();
+    try {
+      await connect();
+    } catch (error) {
+      console.log('connection error ', error)
+    }
+    
     
   };
 
@@ -79,11 +86,20 @@ let initialize = async () => {
     portInfo.current = port.current?.getInfo()
     let scanned = '';
     let end = false
+    const abort_controller = new AbortController();
     while (port.current?.readable) {
       // Listen to data coming from the serial device.
       //console.log('readable, isOpen', port.current.readable, port.current.IsOpen)
       const textDecoder = new TextDecoderStream();
-      const readableStreamClosed = port.current.readable.pipeTo(textDecoder.writable);
+      
+        const readableStreamClosed = port.current.readable.pipeTo(textDecoder.writable, { signal: abort_controller.signal }).catch( (error) => {
+          console.log(error) 
+          abort_controller.abort();
+          console.log('try to reconnect') 
+          
+        });
+      
+      
       const reader = textDecoder.readable.getReader();
       
       console.log('reader', reader)
@@ -94,7 +110,7 @@ let initialize = async () => {
          end = (JSON.stringify(scan).indexOf('r')>-1)
          scanned = scanned + scan.value
          console.log('scan',scan)
-         
+
          if(end){
            
             let code = scanned.replace(/\W/g, "")

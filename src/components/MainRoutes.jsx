@@ -30,7 +30,7 @@ const MainRoutes = () => (
         <Route  element={<ProtectedRoutes/>}>
             <Route path="app" element={<OpenCashier/>}/>
             <Route path="app/cashier" element={<CashierPage/>}/>
-            <Route path="app/logout" element={<LogoutPage/>}/>
+            <Route path="/logout" element={<LogoutPage/>}/>
                               
              {/* <Route path="settings" element={<Settings/>}/>            
              <Route path="users" element={<Users extraItem="test extra item from router"/>}/>            

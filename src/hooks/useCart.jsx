@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react'
 import usePersistentContext from './usePersistentContext'
 import useTimeZoneDate from './useTimeZone'
+import useCashier from './useCashier'
 
 
 
@@ -15,9 +16,10 @@ import useTimeZoneDate from './useTimeZone'
 const currentCartModel = {
     active:false,
     cart_id:'',
-    date:'',
-    created_at:'',
-    closed_at:'',
+    created_at_date:'',
+    created_at_time:'',
+    closed_at_date:'',
+    closed_at_time:'',
     count:0,
     total:0,
     weight:0,
@@ -49,7 +51,7 @@ const useCart = () => {
         numeric   
       } = useTimeZoneDate()
 
-    
+    const {insertCart} = useCashier()
 
     const total = React.useCallback((arr, field) => arr.reduce((a,e)=>{
         let val = e.deleted?0:e[field]
@@ -71,8 +73,8 @@ const useCart = () => {
             cart_id:millis.toString(),
             timestamp,
             active:true,
-            date:formattedDate,
-            created_at:formattedTime,
+            created_at_date:formattedDate,
+            created_at_time:formattedTime,
             closed_at:'',
             costumer:{},
             items:[],
@@ -86,9 +88,8 @@ const useCart = () => {
       
       })
 
-      const insert = (item)=>{
-        let items = [...currentCart.items, item]
-        setCurrentCart({...currentCart, items:items})
+      const reset = ()=>{
+        setCurrentCart({active:false})
       }
 
 
@@ -138,8 +139,8 @@ const useCart = () => {
         el.entry_id = millis
         el.uid=crypto.randomUUID()
         el.deleted = false
-        el.date_added= formattedDate
-        el.time_added= formattedTime
+        el.added_date= formattedDate
+        el.added_time= formattedTime
         el.index=pos
         el.order = o
         el.quantity= q
@@ -180,6 +181,29 @@ const useCart = () => {
     const deleteCart = React.useCallback((e) => { 
         if (window.confirm('Cancella il carrello?')) setCurrentCart({...currentCartModel}) 
       })
+
+
+    const closeCart = async() => {
+
+        console.log('closing cart')
+    
+        let c = {...currentCart}
+        c.active=false
+        
+        c.closed_at_date=formattedDate
+        c.closed_at_time=formattedTime
+
+        c.count= c.items.length
+        c.purchase_items_count= c.items.filter(e=>!e.deleted).length
+        c.total=total(c.items,'calculated_price')
+
+        //update cashier with current cart
+        insertCart(c)
+        
+        //clean last current cart object in memory state
+        reset()
+    
+      }
 
     
     
@@ -285,7 +309,8 @@ const useCart = () => {
         deleteCart,
         currentCart,
         addReadedItem,
-        removeItemByKey 
+        removeItemByKey,
+        closeCart 
     }
    
   

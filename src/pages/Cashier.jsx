@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import Keyboard from '../components/Keyboard';
 import useCart from '../hooks/useCart';
+import useCashier from '../hooks/useCashier';
 import useScannerData from '../hooks/useScannerData';
 import DisplayList from '../components/DisplayList';
 
@@ -22,13 +23,17 @@ export const CashierPage = () => {
 
     const toggleSwap = () => setSwap(state => !state)
 
-    const navigateToLogoutPage = ()=> navigate('/logout')
+    const navigateToLogoutPage = ()=> navigate('/logout', { replace: true })
 
     const {
         newCart,
         deleteCart,
-        currentCart
+        currentCart,
+        closeCart
     } = useCart()
+
+
+    const {closeCashier} = useCashier()
 
 
     
@@ -37,9 +42,18 @@ export const CashierPage = () => {
     const {clearCurrentRead} = useScannerData()
 
     const newCartClicked = React.useRef(false)
+
+    const handleCloseCart = () => {
+        console.log('close cart')
+        closeCart()
+        setIdle(true)
+       
+    }
     
 
     const tabBtnClass = `h-full w-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`
+
+    const tabBtn = `flex items-center h-full w-full p-3 bg-white text-teal-800 font-thin rounded-lg shadow-md `
 
     const swapBtnClass = ` h-full px-4 bg-white text-stone-800 font-semibold rounded-lg shadow-md `
 
@@ -72,17 +86,25 @@ export const CashierPage = () => {
 
     }
 
+    const handleCloseCashier = () => {
+
+        console.log('close cash')
+        closeCashier()
+        navigateToLogoutPage()
+    }
+
 
     return(
         
         <> 
              <div className="flex items-center justify-between w-full h-[50px] flex-row-reverse">
                 <div className="flex h-full items-end justify-start gap-2 w-5/12 p-1">
-                    <button className={`${tabBtnClass}`}>01</button>
-                    <button className={`${tabBtnClass}`}>02</button>
-                    <button className={`${tabBtnClass}`}>03</button>
-                    <button className={`${tabBtnClass}`}>04</button>
-                    <button className={`${tabBtnClass}`}>05</button>
+                    <button className={`${tabBtn}`}>01</button>
+                    <button className={`${tabBtn}`}>02</button>
+                    <button className={`${tabBtn}`}>03</button>
+                    <button className={`${tabBtn}`}>04</button>
+                    <button className={`${tabBtn}`}
+                    onClick={handleCloseCashier}>CHIUDERE CASSA</button>
 
                 </div>
                 
@@ -155,7 +177,8 @@ export const CashierPage = () => {
                             
                             <button className={`${regularBtnClass}`} onClick={navigateToLogoutPage}><i className="fas fa-arrow-right-from-bracket fa-2x text-stone-500 fa-flip-horizontal"/></button>
                             <button className={`${regularBtnClass}`}><i className="fa-regular fa-rectangle-list fa-2x text-stone-500 "/></button>
-                            <button className={`${largeBtnClass} bg-blue-100 px-8`}>CHIUDI CONTO</button>
+                            <button className={`${largeBtnClass} bg-blue-100 px-8`}
+                            onClick={handleCloseCart}>CHIUDI CONTO</button>
                         </div>
                     
                     </>
