@@ -44,6 +44,23 @@ function get(table) {
 }
 
 
+function ax(url) {
+  return new Promise((resolve, reject) => {
+    console.log('executando axios get...')
+
+    axios.get(url)
+      .then((res) => {
+        //console.log('res.data', res.data)
+        return resolve(res.data);
+      })
+      .catch((err) => {
+        console.log(err)
+        return reject(err);
+      });
+  });
+}
+
+
 const fetchQuery = async (body) => {
   
   const requestOptions = (objBody) => {
@@ -61,6 +78,7 @@ const fetchQuery = async (body) => {
 
 
 return {
+  ax,
   get,
   fetchQuery
 }
