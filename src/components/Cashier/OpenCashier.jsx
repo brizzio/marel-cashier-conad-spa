@@ -9,11 +9,17 @@ import StaticMap from '../StaticMap';
 import useAuth from '../../hooks/useAuth';
 import StoreOptions from '../StoreOptions';
 import WorkingStore from './WorkingStore';
+import DisplayBalance from '../DisplayBalance';
+import useCashInventory from '../../hooks/useCashInventory';
+import useIntl from '../../hooks/useIntl';
+
 
 
 const OpenCashier = ()=> {
   
   const {logout} = useAuth()
+
+  
 
   const getUser = () =>{
     return JSON.parse(localStorage.getItem('user'))
@@ -36,12 +42,13 @@ const OpenCashier = ()=> {
     cashier
     } = useCashier()
   
-console.log('First data={user}', user)
 
 
   React.useEffect(()=>{
     console.log('opencashier eff ', step, user.stores.length == 1)
     if(user.stores.length == 1) setWorkingStore(user.stores[0])
+
+    return ()=>console.log('opencashier eff unmount')
     
   },[step])
 
@@ -49,12 +56,17 @@ console.log('First data={user}', user)
     switch (step) {
       case 0:
         return workingStore
-        ?<WorkingStore store={workingStore} user={user} undo={unSelectStore}/>
+        ?<WorkingStore store={workingStore} user={user} undo={unSelectStore} next={next}/>
         :<First data={user.stores} exit={exit} select={selectStore}/>
       case 1:
         return <Second back={back} next={next}/>;
        case 2:
-         return <Wrapper back={back} open={openCashier}/>;
+         return <Wrapper 
+         back={back} 
+         open={openCashier} 
+         store={workingStore} 
+         user={user}
+         />;
        default:
          return <First />;
     }
@@ -99,6 +111,7 @@ console.log('First data={user}', user)
 export default OpenCashier
 
 //display cashier info for evaluation - first step
+
 const First =({data, exit, select})=>{
 //style={{background-image:`url(male.png)`}}
 
@@ -125,38 +138,81 @@ return (
 }
 
 
-
-
-
-
-
-
-
-
-
 //display cashier info for evaluation - first step
 const Second = ({back, next})=>{
 
+    const moveToNext = () => next()
+
     return (
-        <div className='flex w-full h-full items-center justify-center debug'>
-            register money
-        <button className='absolute bottom-0 left-0 p-4' onClick={back}>INDIETRO</button>
-        <button className='absolute bottom-0 right-0 p-4'onClick={next}>AVANTI</button>
+        <div className='flex w-full h-full items-center justify-center'>
+            <DisplayBalance confirm={moveToNext}/>
+        
         </div>
     )
 
 
 }
 
-const Wrapper = ({back, open})=>{
+const Wrapper = ({back, open, store, user})=>{
+
+    const {total} = useCashInventory()
+    const {currency} = useIntl()
+
+    const row=`flex h-fit items-center justify-center gap-6 `
+    const label =`text-lg font-semibold text-center p-3`
+    const field =`text-2xl  border border-teal-300 border-2 border-opacity-20 rounded-xl shadow-xl bg-white bg-opacity-30 drop-shadow-xl grow px-4 py-[1rem] font-semibold `
     
     return (
        
-         <div className='flex w-full h-full items-center justify-center debug'>
-         confirm open cashier
-     <button className='absolute bottom-0 left-0 p-4' onClick={back}>INDIETRO</button>
-     <button className='absolute bottom-0 right-0 p-4'onClick={open}>CONFERMA</button>
-     </div>
+    
+            
+        <div className='relative flex flex-col border-l border-stone-200 h-full w-7/12 gap-[1rem] pt-4 px-4'>
+            <div className={`${row}`}>
+                <span className={`${label}`}><i className="fas fa-store fa-2x text-stone-600"></i></span>
+                <span className={`${field}`}>{store.corporate_name}</span>
+            </div>
+            <div className={`${row}`}>
+                <span className={`${label}`}>
+                {user.isAdmin || user.isSuper
+                    ?<i className="fas fa-user-shield text-orange-600 fa-2x text-center"></i>
+                    :user.isCashier 
+                    ?<i className="fas fa-user-pen fa-2x text-green-700"></i>
+                    :<i className="fas fa-user fa-2x text-stone-400"></i>
+                }
+                </span>
+                <span className={`${field}`}>{user.name}</span>
+            
+            </div>
+            <div className={`${row}`}>
+                <span className={`${label}`}><i className="fas fa-cash-register fa-2x text-stone-600"></i></span>
+                <span className={`${field}`}>3182272</span>
+            </div>
+            <div className={`${row}`}>
+                <span className={`${label}`}><i className="fas fa-sack-dollar fa-2x text-stone-600"></i></span>
+                <span className={`${field}`}>{currency(total)}</span>
+            </div>
+            <div>
+                <button 
+                className='btn-primary w-full py-[3rem] mt-[1rem] text-3xl'
+                onClick={open}>CONFERMA</button>
+            </div>
+            
+        
+        
+        
+        {/* ABSOLUTE POSITIONED ITEMS 
+        <button className='absolute bottom-0 left-0 p-4 border rounded-md bg-white shadow-xl' onClick={back}><i className="fas fa-chevron-left px-2"></i>ESCI</button>
+        <button className='absolute bottom-0 right-0 btn-primary'onClick={open}>CONFERMA</button>*/}
+        
+        
+        </div>
+           
+         
+         
+         
+         
+         
+     
     )
 
 

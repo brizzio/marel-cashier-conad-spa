@@ -1,13 +1,15 @@
 /* eslint-disable react/prop-types */
-import React from 'react'
+
 import StaticMap from '../StaticMap'
 
-const WorkingStore = ({store, user, undo}) => {
+const WorkingStore = ({store, user, undo, next}) => {
 
   const realce = 'border border-stone-300 border-2 border-opacity-30 border-4 rounded-xl shadow-xl bg-white bg-opacity-80 drop-shadow-sm backdrop-blur-xl'
 // ${realce}
 
   const back = () => undo()
+
+  const nextStep = () => next()
  
   const row=`flex h-fit items-center justify-center gap-6 `
   const label =`text-lg font-semibold text-center p-3`
@@ -63,7 +65,8 @@ const WorkingStore = ({store, user, undo}) => {
                     <span className={`${field}`}>device</span>
                 </div>
                 <div className={`${row}`}>
-                    <button className=' w-11/12 absolute bottom-[1rem] debug py-4 border border-teal-300 border-2 border-opacity-20 rounded-xl shadow-xl bg-teal-700 text-white text-3xl drop-shadow-xl'> FONDO CASSA </button>
+                    <button className=' w-11/12 absolute bottom-[1rem] debug py-4 border border-teal-300 border-2 border-opacity-20 rounded-xl shadow-xl bg-teal-700 text-white text-3xl drop-shadow-xl'
+                    onClick={nextStep}> FONDO CASSA </button>
                 </div>    
             </div>
         </div>

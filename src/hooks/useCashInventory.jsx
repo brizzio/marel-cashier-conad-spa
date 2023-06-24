@@ -5,38 +5,66 @@ const useCashInventory = () => {
 
     const key = 'inventory'
     const [inventory=[], setInventory] = usePersistentContext(key)
-    const [total, setTotal] = React.useState(0)
+  
+   
   
     React.useEffect(() => {
       let existing = localStorage.getItem(key)
       if(!existing) {
-        console.log('registering new device')
+        console.log('setting cash')
         setInventory(inventoryDefaultData)
       }
     }, []);
 
-    const balance = inventory.filter(el => {
-        return el.quantity > 0;
-      });
+    
+    const setRowSelectedByIndex = (index) => {
+      const arr = [...inventory].reduce((a, c, i) => {
+        return [...a, { ...c, selected: i === index ? true : false }];
+      }, []);
+      //console.log('arr', arr)
+      setInventory(arr);
+      
+    };
 
-    React.useMemo(()=>{
+    const clearSelections = () => {
+      const arr = [...inventory].reduce((a, c, i) => {
+        return [...a, { ...c, selected: false }];
+      }, []);
+      //console.log('arr', arr)
+      setInventory(arr);
+      
+    };
 
-       let sum = inventory.reduce((a,el)=>{
-            let val = Number(el.value) * Number(el.quantity)
-            console.log(val)
-            return a + val
-        },0)
+    const updateQuantityToSelectedRow = (quant) => {
+      const arr = [...inventory].reduce((a, c, i) => {
+        let updatedRow = c.selected
+        ?{
+          ...c,
+          quantity:quant,
+          selected:false}
+        :{...c}
+        return [...a, { ...updatedRow }];
+      }, []);
+      //console.log('arr', arr)
+      setInventory(arr);
+      
+    };
 
-        setTotal(sum)
-
-    }, [inventory])
+    let total = [...inventory].reduce((a,el)=>{
+      let val = Number(el.value) * Number(el.quantity)
+      return a + val
+  },0)
+  
 
    
   
 
   return {
-    balance,
-    total
+   inventory,
+   setRowSelectedByIndex,
+   updateQuantityToSelectedRow,
+   clearSelections,
+   total
   }
 }
 
@@ -46,22 +74,22 @@ export default useCashInventory
 
 let inventoryDefaultData = [
 
-    {type:'bill', face:'200', value:200, quantity:100},
-    {type:'bill', face:'100', value:100, quantity:100},
-    {type:'bill', face:'50' ,value:50 ,quantity:100},
-    {type:'bill', face:'20' ,value:20 ,quantity:100},
-    {type:'bill', face:'10' ,value:10 ,quantity:100},
-    {type:'bill', face:'5' ,value:5, quantity:100},        
-    {type:'bill', face:'2' ,value:2 , quantity:100},        
-    {type:'bill', face:'1' ,value:1 , quantity:100},       
-    {type:'coin', face:'2€' ,value:2 ,quantity:100},
-    {type:'coin', face:'1€' ,value:1 , quantity:100},
-    {type:'coin', face:'50C', value:0.5, quantity:100},
-    {type:'coin', face:'20C', value:0.20 , quantity:100},
-    {type:'coin', face:'10C', value:0.10 , quantity:100},
-    {type:'coin', face:'5C' ,value:0.05 , quantity:100 },
-    {type:'coin', face:'2C', value:0.2 , quantity:100},        
-    {type:'coin', face:'1C' ,value:0.01 , quantity:100 },     
+    {type:'bill', face:'200', value:200, quantity:10},
+    {type:'bill', face:'100', value:100, quantity:10},
+    {type:'bill', face:'50' ,value:50 ,quantity:10},
+    {type:'bill', face:'20' ,value:20 ,quantity:10},
+    {type:'bill', face:'10' ,value:10 ,quantity:10},
+    {type:'bill', face:'5' ,value:5, quantity:10},        
+    {type:'bill', face:'2' ,value:2 , quantity:10},        
+    {type:'bill', face:'1' ,value:1 , quantity:10},       
+    {type:'coin', face:'2€' ,value:2 ,quantity:10},
+    {type:'coin', face:'1€' ,value:1 , quantity:10},
+    {type:'coin', face:'50C', value:0.5, quantity:10},
+    {type:'coin', face:'20C', value:0.20 , quantity:10},
+    {type:'coin', face:'10C', value:0.10 , quantity:10},
+    {type:'coin', face:'5C' ,value:0.05 , quantity:10 },
+    {type:'coin', face:'2C', value:0.2 , quantity:10},        
+    {type:'coin', face:'1C' ,value:0.01 , quantity:10 },     
      ]
 
      

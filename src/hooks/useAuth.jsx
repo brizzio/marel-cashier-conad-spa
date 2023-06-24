@@ -1,5 +1,4 @@
 import React from 'react'
-import usePersistentContext from './usePersistentContext'
 import useSchedule from '../hooks/useSchedule'
 import useTimeZoneDate from './useTimeZone'
 

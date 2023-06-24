@@ -113,7 +113,8 @@ const qBtnClass = `w-full py-2 px-4 ${isQuantityButtonClicked?'bg-teal-600 text-
             <button className={btnClass} onClick={handleKeyClick} value='1'>1</button>
             <button className={btnClass} onClick={handleKeyClick} value='2'>2</button>
             <button className={btnClass} onClick={handleKeyClick} value='3'>3</button>
-            <button className={`${ btnClass} col-span-2`} onClick={handleKeyClick}>0</button>
+            <button className={`${ btnClass} col-span-2`} onClick={handleKeyClick}
+            value='0'>0</button>
             <button className={btnClass} onClick={handleClearInput}><i className="fas fa-delete-left text-stone-500"/></button>
         </div>
     
