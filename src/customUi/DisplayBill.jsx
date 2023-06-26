@@ -52,10 +52,10 @@ const DisplayBill = ({
         <span className="text-2xl p-1 w-[3rem] h-[2.3rem]" >{selected?keyboard:count}</span>
       </div>
     </div>
-    <div className="flex h-fit items-center justify-end">
+    <div className="flex h-fit items-center justify-start debug border rounded-xl px-2 border-stone-700 border-opacity-20 bg-white/80 shadow-lg">
   
-      <span className="text-lg p-1 ">&#8364;</span>
-      <span className="text-lg p-1 ">{subtotal()}</span>
+      <span className="text-2xl p-1 font-semibold">&#8364;</span>
+      <span className="text-2xl p-1 ">{subtotal()}</span>
     </div>
 
     

@@ -4,6 +4,7 @@ import DisplayBill from '../customUi/DisplayBill';
 import DisplayCoin from '../customUi/DisplayCoin';
 import useCashInventory from '../hooks/useCashInventory';
 import useIntl from '../hooks/useIntl';
+import useSwap from '../hooks/useSwap';
 
 const sample ={
     type: '',
@@ -20,6 +21,8 @@ const DisplayBalance = ({confirm}) => {
     clearSelections, 
     updateQuantityToSelectedRow
   } = useCashInventory()
+
+  const {swap} = useSwap()
 
   const [input, setInput] = React.useState('')
 
@@ -73,10 +76,11 @@ const row=`flex items-center justify-start gap-2 w-full`
 const label =`text-lg font-semibold text-center p-3`
 const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-20 rounded-xl shadow-xl bg-white bg-opacity-90 drop-shadow-xl px-4 py-[1rem] grow `
 
+//${swap?'flex-row-reverse':''}
 
     return (
-      <div className='flex items-start grow h-full justify-between'>
-        <div className='grid grid-rows-8 grid-cols-2 grid-flow-row w-7/12 max-h-[32rem] gap-4 mb-2'>
+      <div className={`flex  ${swap?'flex-row-reverse':''} items-start grow h-full justify-between`}>
+        <div className='grid grid-rows-8 grid-cols-2 grid-flow-row w-8/12 max-h-[32rem] gap-3.5 mb-2 pr-4'>
         
 
         {[...inventory]?.map((item, index) => (

@@ -4,7 +4,7 @@ import React from 'react'
 import useScanner from './useScanner'
 import { useNavigate } from 'react-router-dom'
 import usePersistentContext from './usePersistentContext'
-import useCashInventory from './useCashInventory'
+
 import useTimeZoneDate from './useTimeZone'
 import useSessions from './useSessions'
 
@@ -77,7 +77,7 @@ const useCashier = () => {
         navigate('cashier')
     })
 
-    const closeCashier = React.useCallback(() => { 
+    const closeCashier = React.useCallback(async () => { 
 
         console.log('closeCashier',cashier 
         && cashier.is_active 
@@ -88,10 +88,15 @@ const useCashier = () => {
         
         )
 
+        let response = false
+
         if(cashier 
             && cashier.is_active 
             && !cashier.carts.length)
-            if (window.confirm(emptyCashierDeleteMessage)) setCashier(null) 
+            if (window.confirm(emptyCashierDeleteMessage)) {
+                setCashier(null) 
+                response = true
+            }
 
         if(cashier 
             && cashier.is_active 
@@ -109,11 +114,12 @@ const useCashier = () => {
                 console.log('session', session)
                 save(session)
                 setCashier(cashierModel)
+                response = true
 
 
             }//close if window confirm
 
-
+            return response
 
     },[cashier])
 

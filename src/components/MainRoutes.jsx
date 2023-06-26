@@ -1,12 +1,13 @@
 
 
-import {Routes, Route, Navigate} from 'react-router-dom'
+import {Routes, Route} from 'react-router-dom'
 
 
 import Login from '../pages/Login';
 import { LogoutPage } from '../pages/Logout';
-import { CashierPage } from '../pages/Cashier';
-import { DashboardPage } from '../pages/Dashboard';
+import CashierIndex from '../pages/cashier/CashierIndex';
+//import { CashierPage } from '../pages/Cashier';
+//import { DashboardPage } from '../pages/Dashboard';
 import OpenCashier from './Cashier/OpenCashier';
 import { LandingPage } from '../pages/Landing';
 
@@ -29,7 +30,7 @@ const MainRoutes = () => (
         <Route path="landing" element={<LandingPage />} />
         <Route  element={<ProtectedRoutes/>}>
             <Route path="app" element={<OpenCashier/>}/>
-            <Route path="app/cashier" element={<CashierPage/>}/>
+            <Route path="app/cashier/*" element={<CashierIndex/>}/>
             <Route path="/logout" element={<LogoutPage/>}/>
                               
              {/* <Route path="settings" element={<Settings/>}/>            

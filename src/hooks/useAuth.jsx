@@ -1,10 +1,13 @@
 import React from 'react'
 import useSchedule from '../hooks/useSchedule'
 import useTimeZoneDate from './useTimeZone'
+import useSwap from './useSwap'
 
 const useAuth = () => {
 
     const [user, setUser] = React.useState({})
+
+    const {toggleSwap} = useSwap()
 
     const {
         millis,
@@ -46,12 +49,15 @@ const useAuth = () => {
         logout_time:'',
         tenant:tenantInfo,
         stores:detailedStores,
-        schedule: getUserSchedule()
+        schedule: getUserSchedule(), //this will came from database. !!!!
+
+        
     }
     
     console.log('usr', usr)
     localStorage.setItem('user',JSON.stringify(usr))
     setUser(usr)
+    toggleSwap(usr.isLeftHanded)
     return;
 }
 
@@ -195,6 +201,7 @@ const tenants =[
       isCashier:false,
       tenant_role:'Amministratore Delegato',
       schedule:{},
+      isLeftHanded:false
 
     },
     {
@@ -209,6 +216,7 @@ const tenants =[
       tenant_role:'Operatore Cassa',
       work_at_store_id:'1',
       schedule:{},
+      isLeftHanded:true,
     },
 ]
 

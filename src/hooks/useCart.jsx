@@ -183,10 +183,10 @@ const useCart = () => {
       })
 
 
-    const closeCart = async() => {
+    const closeCart = () => {
 
         console.log('closing cart')
-    
+        
         let c = {...currentCart}
         c.active=false
         
