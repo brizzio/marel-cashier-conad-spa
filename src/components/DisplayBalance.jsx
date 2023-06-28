@@ -103,7 +103,7 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
                 <div className='text-4xl font-thin'>
                   {input}
                 </div>
-                <div className={`${input?'':'hidden'}`}>
+                <div className={`${input?'':'opacity-0'}`}>
                   <button
                   onClick={confirmCurrencyQuantity}>
                    <i className="fas fa-2x bg-white text-green-700 fa-circle-check"></i>

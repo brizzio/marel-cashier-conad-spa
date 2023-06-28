@@ -18,19 +18,21 @@ const useSwap = () => {
 
     const toggleSwap = () => setSwap(!swap)
 
+    const setUserSwap = (value)=>setSwap(value)
+
     React.useEffect(()=>{
 
         let existing = localStorage.getItem('swap')
         if(!existing){
             console.log('setting swap')
-            setSwap
+            setUserSwap(true)
         }
 
     })
   
   
   
-    return {swap, toggleSwap}
+    return {swap, toggleSwap, setUserSwap}
 }
 
 export default useSwap

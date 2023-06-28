@@ -13,6 +13,7 @@ import useCashier from './useCashier'
 //https://codesandbox.io/s/react-input-autocomplete-knwn3?file=/src/InputAuto.js
 
 
+
 const currentCartModel = {
     active:false,
     cart_id:'',
@@ -27,7 +28,15 @@ const currentCartModel = {
     fiscal_code:'',
     costumer:{},
     bags:0,
-    items:[]
+    items:[],
+    payment:{
+      isEditing:false,
+      dueTotal:0,
+      cashedInTotal:0,
+      pending:0,
+      list:[],
+      isFulfilled:false
+  }
 }
 
 
@@ -205,6 +214,50 @@ const useCart = () => {
     
       }
 
+
+      const initPayment = ()=>{
+
+        let payment = {
+          ...currentCart.payment,
+          dueTotal:currentCart.total,
+          pending:currentCart.total,
+          isEditing:true
+        }
+
+        let updatedCart = {
+          ...currentCart,
+          payment
+        }
+
+        setCurrentCart(updatedCart)
+      
+
+      }
+
+      const addPayment = (item)=>{
+
+        let items = [
+          ...currentCart.payment.list,
+         item
+        ]
+
+        let updatedPayment = {
+          ...currentCart.payment,
+         list:items
+        }
+        
+
+        let updatedCart = {
+          ...currentCart,
+          payment:updatedPayment
+        }
+
+        setCurrentCart(updatedCart)
+      
+
+      }
+
+
     
     
 
@@ -310,6 +363,8 @@ const useCart = () => {
         currentCart,
         addReadedItem,
         removeItemByKey,
+        initPayment,
+        addPayment,
         closeCart 
     }
    

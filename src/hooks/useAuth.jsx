@@ -7,7 +7,7 @@ const useAuth = () => {
 
     const [user, setUser] = React.useState({})
 
-    const {toggleSwap} = useSwap()
+    const {setUserSwap} = useSwap()
 
     const {
         millis,
@@ -57,7 +57,7 @@ const useAuth = () => {
     console.log('usr', usr)
     localStorage.setItem('user',JSON.stringify(usr))
     setUser(usr)
-    toggleSwap(usr.isLeftHanded)
+    setUserSwap(!usr.isLeftHanded)
     return;
 }
 

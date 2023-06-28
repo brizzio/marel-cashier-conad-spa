@@ -9,6 +9,7 @@ import DisplayList from '../../components/DisplayList';
 import useSwap from '../../hooks/useSwap';
 //import BouncingDotsLoader from '../../components/BouncingDotsLoader/BouncingDotsLoader';
 import CheckOutIndex from './checkout/CheckOutIndex';
+import useCheckout from './checkout/useCheckout';
 
 
 
@@ -74,6 +75,10 @@ export const CashierPage = () => {
 
     const {closeCashier} = useCashier()
 
+    const {
+        init
+    }= useCheckout()
+
 
 
     const {clearCurrentRead} = useScannerData()
@@ -137,15 +142,18 @@ export const CashierPage = () => {
         }
       }, []);
 
+
+
       const handleCloseCart = () => {
         console.log('close cart')
+        init()
         navigate('checkout')
         
        
     }
 
     React.useEffect(()=>{
-        if(!currentCart.active) setIdle(true)
+        if(!currentCart?.active) setIdle(true)
     },[currentCart])
     
     

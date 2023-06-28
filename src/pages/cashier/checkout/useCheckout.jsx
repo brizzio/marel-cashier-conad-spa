@@ -1,11 +1,36 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React from 'react'
+import useCart from '../../../hooks/useCart';
+import usePersistentContext from '../../../hooks/usePersistentContext';
+import useTimeZoneDate from '../../../hooks/useTimeZone';
 
 const useCheckout = () => {
 
+
+  const paymentModel = {
+    isEditing:false,
+    dueTotal:0,
+    cashedInTotal:0,
+    pending:0,
+    list:[],
+    isFulfilled:false
+}
+
+  const paymentItemModel = {
+    isEditing:false,
+    dueTotal:0,
+    cashedInTotal:0,
+    pending:0,
+    list:[],
+    isFulfilled:false
+
+  }
+
+
   const optionsModel= [
     {
+        id:1,
         type:'bancomat',
         url:'bancomat',
         title:'carte',
@@ -14,6 +39,7 @@ const useCheckout = () => {
         total:0
     },
     {
+        id:2,  
         type:'cash',
         url:'cash',
         title:'contanti',
@@ -22,7 +48,8 @@ const useCheckout = () => {
         total:0
     },
     {
-        type:'bonus',
+      id:3,  
+      type:'bonus',
         url:'bonus',
         title:'bonus',
         icon:'fas fa-gifts',
@@ -30,6 +57,7 @@ const useCheckout = () => {
         total:0
     },
     {
+      id:4,
         type:'difer',
         url:'difer',
         title:'altri',
@@ -37,32 +65,102 @@ const useCheckout = () => {
         selected:false,
         total:0
     },
-]
-
-const paymentsModel= {
-        isEditing:false,
-        dueTotal:0,
-        cashedInTotal:0,
-        list:[],
-        isFulfilled:false
-    }
-
 
    
-    const setRowSelectedByIndex = (arr=optionsModel, index) => {
-      return [...arr].reduce((a, c, i) => {
+]
+
+const keyPayment = 'payment'
+const keyOptions = 'options'
+const [payment, setPayment] = usePersistentContext(keyPayment)
+const [options, setOptions] = usePersistentContext(keyOptions)
+
+const {
+  currentCart
+}= useCart()
+
+
+const {
+  millis,
+  formattedDate,
+  formattedTime
+} = useTimeZoneDate()
+
+
+    
+
+    const init = () =>{
+      console.log('init payment and options')
+      setPayment({
+        ...paymentModel,
+        isEditing:true,
+        dueTotal:currentCart?.total,
+        cashedInTotal:0,
+        pending:currentCart?.total,
+
+      })
+      setOptions(optionsModel)
+    }
+
+   
+    const setRowSelectedByIndex = (index) => {
+      let selectedOptions = [...options].reduce((a, c, i) => {
         return [...a, { ...c, selected: i === index ? true : false }];
       }, []);
-           
+      
+      setOptions(selectedOptions)
     };
 
-    const clearSelections = (arr=optionsModel) => {
-      return [...arr].reduce((a, c, i) => {
+    const clearSelections = () => {
+      let clearedOptions = [...options].reduce((a, c, i) => {
         return [...a, { ...c, selected: false }];
       }, []);
       
+      setOptions(clearedOptions)
       
     };
+
+
+    const updateOptionTotal = (val) => {
+      let updatedOptions = [...options].reduce((a, c, i) => {
+        if(c.selected){
+          let sum = Number(c.total + val)
+          c.total = sum
+        }
+        return [...a, { ...c}];
+      }, []);
+      
+      setOptions(updatedOptions)
+    };
+
+    const addPaymentToList=(item)=>{
+      console.log('add payment to list', item)
+      let opt = options.filter(el=> el.selected == true)[0]
+      console.log('opt', opt)
+      item.id= millis,
+      item.added_at_date=formattedDate,
+      item.added_at_time=formattedTime,
+      item.value=Number(item.raw.amount)
+      item.type_id=opt.id
+      item.type=opt.type
+      item.type_name=opt.title
+      
+      let newList = [...payment.list, item ]
+      
+      setPayment({
+        ...payment,
+        cashedInTotal:Number(item.raw.amount),
+        pending:Number(payment.dueTotal-item.raw.amount),
+        list:newList
+      })
+
+      updateOptionTotal(item.raw.amount)
+    }
+
+    const option = ()=>{
+      return options.filter(el=> el.selected === true)[0]
+    }
+
+    
 
    /*  const updateTotalToSelectedRow = (aquant) => {
       const arr = [...inventory].reduce((a, c, i) => {
@@ -89,11 +187,15 @@ const paymentsModel= {
   
 
   return {
-   optionsModel,
-   paymentsModel,
+  
+   init,
    setRowSelectedByIndex,
    //updateQuantityToSelectedRow,
    clearSelections,
+   addPaymentToList,
+   payment,
+   options,
+   option
    //total
   }
 }

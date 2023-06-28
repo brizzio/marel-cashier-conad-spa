@@ -6,6 +6,7 @@ import useCart from '../hooks/useCart';
 import useCashier from '../hooks/useCashier';
 import useScannerData from '../hooks/useScannerData';
 import DisplayList from '../components/DisplayList';
+import useSwap from '../hooks/useSwap';
 
 
 //https://www.kindacode.com/snippet/tailwind-css-make-a-child-element-fill-the-remaining-space/
@@ -16,12 +17,13 @@ import DisplayList from '../components/DisplayList';
 
 export const CashierPage = () => {
 
-    const [swap, setSwap] = React.useState(false)
+    
+    
     const [idle, setIdle] = React.useState(true)
 
     const navigate = useNavigate()
 
-    const toggleSwap = () => setSwap(state => !state)
+    
 
     const navigateToLogoutPage = ()=> navigate('/logout', { replace: true })
 
@@ -32,6 +34,10 @@ export const CashierPage = () => {
         closeCart
     } = useCart()
 
+    const {
+        swap, 
+        toggleSwap, 
+    } = useSwap()
 
     const {closeCashier} = useCashier()
 
