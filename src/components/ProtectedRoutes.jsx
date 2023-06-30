@@ -1,7 +1,7 @@
 
 import {Navigate, Outlet} from 'react-router-dom'
 import { AppLayout } from '../layouts/Application'
-
+import useAuth from '../hooks/useAuth'
 
 
 
@@ -9,8 +9,8 @@ import { AppLayout } from '../layouts/Application'
 
 const  ProtectedRoutes=() =>{
 
-  const auth = !!localStorage.getItem('user') 
-  console.log('auth', auth, !!localStorage.getItem('user') )
+  const {auth} = useAuth()
+  console.log('auth', auth )
   
 
   return auth? <AppLayout><Outlet/></AppLayout>: <Navigate to="/login"/>

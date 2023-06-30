@@ -1,33 +1,19 @@
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
+import React, { useRef } from 'react'
 import useScanner from './useScanner'
 import { useNavigate } from 'react-router-dom'
 import usePersistentContext from './usePersistentContext'
 
 import useTimeZoneDate from './useTimeZone'
 import useSessions from './useSessions'
+import useAuth from './useAuth'
+import { useDevice } from './useDevice'
 
 
 let cashierModel = {
     
     is_active:false,
-    did:'',
-    company:'',
-    company_id:'',
-    company_retail_banner:'',
-    company_store_name:'',
-    company_store_id:'',
-    company_store_lat:'',
-    company_store_lng:'',
-    company_country_iso:'',
-    company_country_name:'',
-    company_postal_code:'',
-    operator_user_id:'',
-    operator_user_name:'',
-    operator_user_role:'',
-    operator_user_is_admin:'',
-    operator_user_is_superuser:'',
     carts:[],
     sales_amount:0,
     taxes_amount:0,
@@ -43,6 +29,7 @@ const useCashier = () => {
 
     const key = 'cashier'
     const [cashier={}, setCashier] = usePersistentContext(key)
+    const workingStore = React.useRef()
     
     const emptyCashierDeleteMessage = "Vuoi chiudere il cassa non iniziato?"
 
@@ -62,16 +49,52 @@ const useCashier = () => {
 
     const navigate = useNavigate()
 
+    const { user } = useAuth()
+    const { did } = useDevice()
+
     const getInventory =()=>JSON.parse(localStorage.getItem('inventory'))
 
     const openCashier = React.useCallback(() => {
+
+        let ws = workingStore.current?workingStore.current:{}
+        let usr = user?user:{}
+        let userData = {...user}
+
+        delete userData.schedule
+        delete userData.stores
+        delete userData.tenant
+
         setCashier({
             ...cashierModel, 
+            ...cashier,
             session_id:crypto.randomUUID(),
             is_active:true,
             open_date:formattedDate,
             open_time:formattedTime,
-            inventory_on_start:getInventory()
+            inventory_on_start:getInventory(),
+
+            did:did.id,
+            company:usr.tenant?.company_name,
+            company_corporate_name:usr.tenant?.corporate_name,
+            company_id:usr.tenant?.id,
+            company_address:usr.tenant?.addresses[0],
+            company_retail_banner: ws.banner_detail?.name,
+            company_retail_banner_logo_url: ws.banner_detail?.logo_url,
+            company_store_name: ws.store_name,
+            company_store_id: ws.store_id,
+            company_store_lat: ws.lat,
+            company_store_lng: ws.lng,
+            company_country_iso: ws.country_iso,
+            company_country_name: ws.country,
+            
+            operator_id:usr.uuid,
+            operator_name:usr.name,
+            operator_alias:usr.alias,
+            operator_role:'CASSIERE',
+            operator_is_admin:usr.isAdmin,
+            operator_is_super:usr.isSuper,
+            logged_user:userData
+            
         })
         initialize()
         navigate('cashier')
@@ -125,6 +148,12 @@ const useCashier = () => {
 
     const updateCashier = (obj) => setCashier({...cashier, ...obj})
 
+    const updateStoreSelection = (st) =>{
+        //add a working store to cashier references
+       workingStore.current=st
+
+    }
+
     const insertCart = React.useCallback((cart) => {
         let updatedCarts = [...cashier.carts, cart]
         setCashier({...cashier, carts:updatedCarts})
@@ -134,6 +163,7 @@ const useCashier = () => {
     openCashier,
     closeCashier,
     updateCashier,
+    updateStoreSelection,
     insertCart,
     cashier
     

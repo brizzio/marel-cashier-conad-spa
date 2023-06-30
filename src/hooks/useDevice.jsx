@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
+import { useEffect} from 'react'
 import usePersistentContext from './usePersistentContext'
 
 export const useDevice= () => {

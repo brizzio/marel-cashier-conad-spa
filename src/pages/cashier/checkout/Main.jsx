@@ -2,21 +2,25 @@
 import DueCashedPendingHeader from "./DueCashedPendingHeader";
 import { PropTypes } from "prop-types";
 import useCheckout from "./useCheckout";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
 
  
   const {
-    payment
+    payment,
+    updateCurrentCartWithPaymentData
   } = useCheckout()
 
-  if(payment?.dueTotal == 0) return(
-    <div
-                className='flex w-5/6 h-5/6 mx-auto items-center justify-center text-stone-400 text-4xl font-thin'
-                >
-                    Scegli una forma di pagamento
-                </div>
-  )
+  const navigate = useNavigate()
+
+  const saveAndPrint =()=>{
+    updateCurrentCartWithPaymentData()
+    navigate('printer')
+
+  }
+
+  
 
     return(
         <div className='flex flex-col gap-3 items-center justify-end h-full w-full p-6 bg-white'>
@@ -37,23 +41,28 @@ const Main = () => {
                             <span>{el.id}</span>
                             <span>{el.type_name}</span>
                             <span>{el.raw.operator}</span>
-                            <span>{el.value}</span>
+                            <span>{Number(el.value).toFixed(2)}</span>
                         </div>
                     )
                 })
                 :<div
-                className='flex w-5/6 h-5/6 mx-auto items-center justify-center text-stone-400 text-4xl font-thin'
+                className='flex  flex-col w-5/6 h-5/6 mx-auto items-center justify-center text-stone-400 text-4xl font-thin'
                 >
-                    {payment?.pending == 0
-                    ?<button
-                    className={`btn-primary`}
-                    >
-                        CONFERMA
-                    </button>
-                    :'Scegli una forma di pagamento'}
+                    
+                    Scegli una forma di pagamento
                 </div>
 
             }
+
+            {payment?.pending == 0
+                                ?<button
+                                className={`absolute bottom-8 right-8 w-1/3 btn-primary`}
+                                onClick={saveAndPrint}
+                                >
+                                    CONFERMA
+                                </button>
+                                :''}
+                
             </div>
             
            

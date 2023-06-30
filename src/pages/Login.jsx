@@ -27,15 +27,13 @@ const  Login=() =>{
   
 
   const login= async (u)=>{
-    
-    await getLoggedUserInfo(u)
-    
+    console.log('on login auth', auth)
+    const logged = await getLoggedUserInfo(u)
+    console.log('on logged before nav', logged)
+    if (logged) navigate('/app')
   }
 
-  React.useEffect(()=>{
-    console.log('login auth', auth)
-    if(auth) navigate('/app')
-  },[auth])
+ 
 
   return <div className='flex flex-col items-center justify-center w-full h-full gap-[3rem]'>
       <h2 className='text-4xl font-thin text-center w-4/12 '>Accesso ristretto a utenti registrati. </h2>

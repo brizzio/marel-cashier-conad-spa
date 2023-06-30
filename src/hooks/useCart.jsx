@@ -215,18 +215,11 @@ const useCart = () => {
       }
 
 
-      const initPayment = ()=>{
-
-        let payment = {
-          ...currentCart.payment,
-          dueTotal:currentCart.total,
-          pending:currentCart.total,
-          isEditing:true
-        }
+      const updatePayment = (pym)=>{
 
         let updatedCart = {
           ...currentCart,
-          payment
+          payment:pym,
         }
 
         setCurrentCart(updatedCart)
@@ -234,7 +227,7 @@ const useCart = () => {
 
       }
 
-      const addPayment = (item)=>{
+      /* const addPayment = (item)=>{
 
         let items = [
           ...currentCart.payment.list,
@@ -257,7 +250,7 @@ const useCart = () => {
 
       }
 
-
+ */
     
     
 
@@ -363,8 +356,7 @@ const useCart = () => {
         currentCart,
         addReadedItem,
         removeItemByKey,
-        initPayment,
-        addPayment,
+        updatePayment,
         closeCart 
     }
    

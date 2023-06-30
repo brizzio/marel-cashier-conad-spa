@@ -39,6 +39,7 @@ const OpenCashier = ()=> {
     openCashier,
     closeCashier,
     updateCashier,
+    updateStoreSelection,
     cashier
     } = useCashier()
   
@@ -51,6 +52,14 @@ const OpenCashier = ()=> {
     return ()=>console.log('opencashier eff unmount')
     
   },[step])
+
+  React.useEffect(()=>{
+    console.log('update cashier with store selected ')
+    if(workingStore) updateStoreSelection(workingStore)
+    
+  },[workingStore])
+
+  
 
   const displayComponent = () => {
     switch (step) {

@@ -75,7 +75,8 @@ const [payment, setPayment] = usePersistentContext(keyPayment)
 const [options, setOptions] = usePersistentContext(keyOptions)
 
 const {
-  currentCart
+  currentCart,
+  updatePayment
 }= useCart()
 
 
@@ -160,6 +161,19 @@ const {
       return options.filter(el=> el.selected === true)[0]
     }
 
+    const updateCurrentCartWithPaymentData = ()=>{
+
+      const pymt = {
+        ...payment,
+        options:options
+      }
+
+      updatePayment(pymt)
+      
+
+
+    }
+
     
 
    /*  const updateTotalToSelectedRow = (aquant) => {
@@ -190,7 +204,7 @@ const {
   
    init,
    setRowSelectedByIndex,
-   //updateQuantityToSelectedRow,
+   updateCurrentCartWithPaymentData,
    clearSelections,
    addPaymentToList,
    payment,

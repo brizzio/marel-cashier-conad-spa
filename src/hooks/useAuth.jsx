@@ -2,10 +2,12 @@ import React from 'react'
 import useSchedule from '../hooks/useSchedule'
 import useTimeZoneDate from './useTimeZone'
 import useSwap from './useSwap'
+import usePersistentContext from './usePersistentContext'
 
 const useAuth = () => {
 
-    const [user, setUser] = React.useState({})
+    const [user, setUser] = usePersistentContext('user')
+    const [auth, setAuth] =usePersistentContext('auth')
 
     const {setUserSwap} = useSwap()
 
@@ -55,22 +57,33 @@ const useAuth = () => {
     }
     
     console.log('usr', usr)
-    localStorage.setItem('user',JSON.stringify(usr))
+    //localStorage.setItem('user',JSON.stringify(usr))
     setUser(usr)
-    setUserSwap(!usr.isLeftHanded)
-    return;
+    setUserSwap(usr.isLeftHanded)
+    setAuth(true)
+    return true;
 }
 
 
 //const getLoggedUserInfo = (usr) => console.log('log info', usr)
    
-const authenticate = (usr) => setUser(usr)
+const authenticate = () => setAuth(true)
 
-const logout = () => localStorage.removeItem('user')
+const logout = () => {
+  setAuth(false)
+  localStorage.removeItem('user')
+}
 
 React.useEffect(()=>{
 
+ 
 
+ let message = 
+ auth
+ ?'user logged in'
+ :'user logged out'
+
+ console.log('useAuth says: ', message)
 },[])
     
 
@@ -78,7 +91,7 @@ React.useEffect(()=>{
     getLoggedUserInfo,
     authenticate,
     user,
-    auth: !!user && JSON.stringify(user) !== '{}',
+    auth,
     logout
   }
 }

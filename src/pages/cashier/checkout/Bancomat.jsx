@@ -31,7 +31,7 @@ const Bancomat = ({
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const handleConfirmValue = ()=>{
-        let bancomatValue = value>0?value:Number(payment.pending).toFixed(2)
+        let bancomatValue = value>0?value:payment.pending
         setPaymentValue(bancomatValue)
         setPos(true)
        

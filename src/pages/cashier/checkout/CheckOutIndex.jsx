@@ -7,6 +7,7 @@ import useCart from '../../../hooks/useCart';
 import useCheckout from './useCheckout'
 import Main from './Main';
 import Bancomat from './Bancomat';
+import Printer from './Printer';
 import {
    
     Routes,
@@ -41,7 +42,7 @@ export default function CheckOutIndex() {
     
     const [loading, setLoading] = React.useState(false)
 
-    
+    //app/cashier/checkout/printer
 
     const handleConfirm = async () => {
         setLoading(true)
@@ -143,6 +144,8 @@ export default function CheckOutIndex() {
                 />} />
                 <Route path="bonus" element={<Bonus back={unSelect}/>} />
                 <Route path="difer" element={<Difer back={unSelect}/>} />
+                <Route path="printer" element={<Printer back={unSelect}/>} />
+
             </Routes>
             </div>
 

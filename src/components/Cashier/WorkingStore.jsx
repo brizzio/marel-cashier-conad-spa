@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 
 import StaticMap from '../StaticMap'
+import {useDevice} from '../../hooks/useDevice'
+
 
 const WorkingStore = ({store, user, undo, next}) => {
 
@@ -10,6 +12,8 @@ const WorkingStore = ({store, user, undo, next}) => {
   const back = () => undo()
 
   const nextStep = () => next()
+
+  const {did} = useDevice()
  
   const row=`flex h-fit items-center justify-center gap-6 `
   const label =`text-lg font-semibold text-center p-3`
@@ -62,7 +66,7 @@ const WorkingStore = ({store, user, undo, next}) => {
                 </div>
                 <div className={`${row}`}>
                     <span className={`${label}`}><i className="fas fa-cash-register fa-2x text-stone-600"></i></span>
-                    <span className={`${field}`}>device</span>
+                    <span className={`${field}`}>{did.id}</span>
                 </div>
                 <div className={`${row}`}>
                     <button className=' w-11/12 absolute bottom-[1rem] debug py-4 border border-teal-300 border-2 border-opacity-20 rounded-xl shadow-xl bg-teal-700 text-white text-3xl drop-shadow-xl'
