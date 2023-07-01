@@ -4,6 +4,7 @@ import React from 'react'
 import useCart from '../../../hooks/useCart';
 import usePersistentContext from '../../../hooks/usePersistentContext';
 import useTimeZoneDate from '../../../hooks/useTimeZone';
+import useScanner from '../../../hooks/useScanner';
 
 const useCheckout = () => {
 
@@ -79,6 +80,8 @@ const {
   updatePayment
 }= useCart()
 
+const {clearReaded} = useScanner()
+
 
 const {
   millis,
@@ -91,6 +94,8 @@ const {
 
     const init = () =>{
       console.log('init payment and options')
+      //clear last reading from scanner
+      clearReaded()
       setPayment({
         ...paymentModel,
         isEditing:true,
@@ -174,6 +179,8 @@ const {
 
     }
 
+    const resetPayment = () => setPayment(null)
+
     
 
    /*  const updateTotalToSelectedRow = (aquant) => {
@@ -207,6 +214,7 @@ const {
    updateCurrentCartWithPaymentData,
    clearSelections,
    addPaymentToList,
+   resetPayment,
    payment,
    options,
    option

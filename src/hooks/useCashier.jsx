@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef } from 'react'
+import React from 'react'
 import useScanner from './useScanner'
 import { useNavigate } from 'react-router-dom'
 import usePersistentContext from './usePersistentContext'
@@ -74,6 +74,7 @@ const useCashier = () => {
             inventory_on_start:getInventory(),
 
             did:did.id,
+            currency:'€',
             company:usr.tenant?.company_name,
             company_corporate_name:usr.tenant?.corporate_name,
             company_id:usr.tenant?.id,
@@ -82,6 +83,7 @@ const useCashier = () => {
             company_retail_banner_logo_url: ws.banner_detail?.logo_url,
             company_store_name: ws.store_name,
             company_store_id: ws.store_id,
+            company_store_fiscal_code:ws.fiscal_code,
             company_store_lat: ws.lat,
             company_store_lng: ws.lng,
             company_country_iso: ws.country_iso,

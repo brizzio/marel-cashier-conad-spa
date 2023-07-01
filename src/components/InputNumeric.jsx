@@ -71,7 +71,7 @@ const confirm= ()=>{
 return (
     <div
   
-    className='relative debug w-2/6  static'
+    className='relative border border-zinc-300 rounded-xl shadow-xl py-4 w-2/6  static bg-white'
     >
         <div
         className=' flex flex-col items-center gap-3 overflow-auto'
@@ -81,7 +81,7 @@ return (
              ref={input}
              type="text" 
              id="first_name" 
-             className="bg-gray-50 border border-gray-300 text-teal-900 text-2xl rounded-lg grow focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " 
+             className=" text-teal-900 text-2xl  grow focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " 
              value={currency}
              placeholder={placeholder}
              onFocus={gotFocus}

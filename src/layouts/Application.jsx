@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import Timer from "../components/Timer";
+import useAuth from "../hooks/useAuth";
 
 //https://stackoverflow.com/questions/58222004/how-to-get-parent-width-height-in-react-using-hooks
 
@@ -13,6 +14,7 @@ export const AppLayout = ({
     const windowSize = React.useRef([window.innerWidth, window.innerHeight]);
 
     const appRef = React.useRef()
+    const {user} = useAuth()
 
     const [height, setHeight] = React.useState(null);
     const [width, setWidth] = React.useState(null);
@@ -25,6 +27,16 @@ export const AppLayout = ({
       }, []);
     
     const headerHeight = '30px';
+
+
+    const icon = user && user.isSuper || user.isAdmin
+    ? <i 
+    className="fas bg-white text-orange-600 fa-circle-check"
+    />
+    : <i 
+    className="fas bg-white text-green-700 fa-circle-check"
+    />
+    
     
 
     function pixelsToRem(pixels) {    
@@ -48,14 +60,14 @@ export const AppLayout = ({
                 src='/bizerba-logo.png' />
             <div className={`flex gap-3`}>
                 <span>
-                    Screen: {windowSize.current[0]} X {windowSize.current[1]} 
+                    {user && user.uuid
+                    ? user.alias 
+                    :'K360 SUPERMARKET AUTOMATION'}
                 </span>
                 <span>
-                    Application: {width} X {height} 
+                    {icon}
                 </span>
-                <span>
-                    Font:{getComputedStyle(document.body).fontSize}
-                </span>
+                
             </div>
         </div>
         <div ref={div} className={`flex flex-col grow w-full  rounded drop-shadow-lg bg-white bg-opacity-20`}>

@@ -128,15 +128,24 @@ const Bancomat = ({
             <div 
             className='flex flex-col h-full w-full items-center justify-center'
             >
+                <div
+                  className='flex flex-col h-3/6 w-full items-center justify-between'
+                >
 
-                <span>Inserire il valore a pagare</span>
-                <InputNumeric
-                placeholder={Number(payment.pending).toFixed(2)}
-                update={handleInputCurrencyChange}
-                />
-                <button
-                onClick={handleConfirmValue}
-                >CONFERMA IL VALORE</button>
+                    <span
+                    className='text-4xl font-thin'
+                    >Inserire il valore a pagare</span>
+                    <InputNumeric
+                    placeholder={Number(payment.pending).toFixed(2)}
+                    update={handleInputCurrencyChange}
+                    />
+                    <button
+                    className='btn-confirm '
+                    onClick={handleConfirmValue}
+                    >CONFERMA IL VALORE</button>
+
+                </div>
+                
 
             </div>
                 

@@ -3,56 +3,177 @@ import React from 'react'
 import { PropTypes } from "prop-types";
 import { useNavigate } from 'react-router-dom'
 import useCheckout from './useCheckout'
-import useCart from '../../../hooks/useCart'
-import useEpson from '../printer/useEpson'
+import useTicket from '../../../hooks/useTicket';
 import PrintableDiv from '../../../components/PrintableDiv'
+import { useDevice } from '../../../hooks/useDevice'
+import useCart from '../../../hooks/useCart';
+import useAuth from '../../../hooks/useAuth';
+import useCashier from '../../../hooks/useCashier';
 
 const Printer = () => {
 
   const navigate = useNavigate()
 
+  const [view, setView] = React.useState('')
 
+  const {
+    ticket,
+    save,
+    generate,
+    reset,
+    printed
+  }= useTicket()
+
+ 
   
-  const {
-    currentCart
-  }= useCart()
-
-  const {
-    
-    ticketFacSimile
-  } = useEpson()
-
-  const print = ()=>{
-   
-      return currentCart
-   
-
-
-  }
 
   React.useEffect(()=>{
-    console.log('ueff')
+    console.log('use effect printer printed', printed())
+    if (!printed()){   
+        generate()
+        //setView(invoice())
     
-  })
+    } 
+
+    
+    
+  },[])
+
+  React.useEffect(()=>{
+    console.log('use effect ticket look', ticket)
+    if (ticket){
+      save()  
+      setView(displayTicket())
+      reset()
+    } 
+
+    
+  },[ticket])
+
+
+  //creates a div element with ticket content
+const displayTicket = ()=>{
+
+  if(!ticket) return '';
+  let t = {...ticket}
+
+  const title = `flex justify-center w-full text-[1.5rem] font-semibold tracking-tighter`
+  const subTitle = `flex justify-center w-full text-[1.5rem] font-normal tracking-tighter`
+  const spot = `flex justify-center w-full text-[1.5rem] font-thin tracking-tighter`
+  const msg = `flex justify-center w-full text-[1.3rem] font-bold tracking-tighter mt-4`
+  const bold = `flex justify-center w-full text-[1rem] font-semibold tracking-tighter mt-4`
+  const norm = `flex justify-center w-full text-[1rem] font-normal tracking-tighter`
+  const detail = `flex justify-between px-2 mt-4 w-full text-[1rem] font-semibold tracking-tighter `
+  const items = `flex flex-col px-2 mt-4 w-full text-[1rem] font-thin tracking-tighter gap-1 `
+  const total = `flex justify-end w-full text-[1.5rem] font-semibold tracking-tighter gap-3 uppercase mt-4`
+  const weight = `flex justify-end w-full text-[1.2rem] font-thin tracking-tighter gap-3 uppercase`
+
+
+  return(
+      <div
+      className='flex flex-col overflow-y-auto w-full border rounded-xl shadow-lg h-5/6 leading-4 gap-2 bg-white p-3'
+      >
+          <div className={title}>
+              <span>{t.tenant.data}</span>
+          </div>
+          <div className={subTitle}>
+              <span>{t.retail_banner.data}</span>
+          </div>
+          <div className={spot}>
+              <span>{t.store_name.data}</span>
+          </div>
+          <div className={spot}>
+              <span>{t.fiscal_code.title}:</span>
+              <span>{t.fiscal_code.data}</span>
+          </div>
+          <div className={msg}>
+              <span>DOCUMENTO GESTIONALE</span>
+          </div>
+          <div className={spot}>
+              <span>SENZA VALORE FISCALE</span>
+          </div>
+          <div className={bold}>
+              <span>{t.date.data}</span>
+              <span> -- </span>
+              <span>{t.time.data}</span>
+          </div>
+          <div className={norm}>
+              <span>{t.id.data} </span>
+          </div>
+          <div className={detail}>
+              <span>PRODOTTO </span>
+              <span>PREZZO </span>
+          </div>
+          <div className={items}>
+              {
+                [...t.items].reduce((a,c,i)=>{
+                  
+                      let p = c.product.lenght > 25
+                      ?c.product.substring(0,25) + '...'
+                      :c.product
+                      let w = `${c.weight}${c.weight_unit} `
+                      let left = `${c.upc} ${p} ${w}`
+                      let right = `${c.order} ${c.price_type} ${c.currency} ${c.price}`
+                      let row = <div
+                      key={i}
+                      className='flex justify-between'
+                      >
+                        <span>{left}</span>
+                        <span>{right}</span>
+                      </div>
+                  return [...a , row]
+              },[])
+                
+                
+                }
+          </div>
+          <div className={total}>
+              <span>{t.amount.title} </span>
+              <span>€ {t.amount.data} </span>
+          </div>
+          <div className={weight}>
+              <span>{t.weight.title} </span>
+              <span className='tracking-normal'>{t.weight.data.toFixed(2).replace(".",",")}Kg. </span>
+          </div>
+
+
+
+      </div>
+  )
+
+
+
+}
 
   return (
     
   <div
-  className='relative flex w-full grow debug '
+  className='relative flex w-full grow items-center '
   >
     <PrinterSetup/>
     
-    <div>
+    <div className='flex flex-col h-full w-3/6 ml-[4rem] justify-center'>
 
-      {currentCart.cart_id}
-      <FacSimile lines={ticketFacSimile()}/>
-    
+      {/* {ticket?.invoice
+      ?[...ticket.invoice].map((el,i)=>{
+        let s='sm'
+        return (
+          <div
+          key={i}
+          className={`flex text-${s} items-center`}
+          >
+            {liner(el)}
+            </div>
+           
+        )
+       
+      })
+      
+     :''} */}
      
-     <button
-    onClick={print}
-    >STAMPA SCONTRINO</button>
+     {view}
     
-    
+       
     </div>
 
 
@@ -65,42 +186,52 @@ const Printer = () => {
 export default Printer
 
 
+const liner = (line)=>{
+
+  return [...line].reduce((a,c,i)=>{
+      let e = <span
+      className='w-[9px] text-center '
+      key={i}
+      >{c}</span>
+      
+      return [...a, e]
+  })
+
+}
+
+
 const PrinterSetup = () => {
 
   const navigate = useNavigate()
 
+  const {
+    currentCart
+  }= useCart()
+
+  const {
+    did
+  }= useDevice()
+
+  const {
+    user
+  }=useAuth()
+
+  const {cashier} = useCashier()
+
   const info={
     ip: `192.168.1.180`,
-    device:'5a6a2cb8-51e4-4226-89cc-bc355a563013',
-    operator:1, //user.uuid
-    store:1, //cashier.store_id.uuid
+    device:did?.id,
+    operator: user?.alias,
+    store:cashier?.company_store_name
 
   }
    
-  const inputs = [
-      {
-          field:'ip',
-          label:'Indirizzo IP'
-      },
-      {
-          field:'company',
-          label:'Nome del Cliente'
-      },
-      {
-          field:'store',
-          label:'Codice del Negozio'
-      },
-      {
-        field:'operator',
-        label:'OPERATORE'
-      }
-  ]
-  
+ 
     
     return (
       
       
-      <div className='flex flex-col w-3/12 h-full debug justify-between'>
+      <div className='flex flex-col w-3/12 h-full justify-between p-2'>
 
         <img 
         className='h-40'
@@ -110,10 +241,10 @@ const PrinterSetup = () => {
         </div>
 
         <div
-        className='flex flex-col justify-around  h-3/6 debug text-lg font-thin '
+        className='flex flex-col justify-around  h-3/6 text-lg font-thin '
         >
           <p>IP:{info.ip}</p>
-          <p>NEGOZIO:{info.store}</p>
+          <p>{info.store}</p>
           <p>CASSA:{info.device}</p>
           <p>UTENTE:{info.operator}</p>
         </div>
@@ -130,45 +261,6 @@ const PrinterSetup = () => {
 }
 
 
-const FacSimile = ({lines}) =>{
-
-  const lineStyle = {
-    marginTop:0,
-  }
-
-  //const {tickets} = useTicket()
-  //const lines = tickets && tickets.length?tickets.slice(-1)[0].lines:[]
-  //console.log('ShowPrintedTicket', tickets.slice(-1), lines, lines?.length)
-
-  
-  return(
-
-    <div className=' flex flex-col justify-start items-start font-mono debug'>
-
-      {[...lines].map((el, i)=>{
-        return (
-        <div className='font-mono leading-4' key={i}>
-          {el.text.length}:{el.text.replace(/\s/g, "_")}
-        </div>
-        )
-      })}
-
-
-    </div>
-     
-    
-  )
-}
-
-FacSimile.propTypes = {
-    
-  lines:PropTypes.array,
-   
-  };
-
-  FacSimile.defaultProp = {
-      lines:[]
-    }
 
 
 

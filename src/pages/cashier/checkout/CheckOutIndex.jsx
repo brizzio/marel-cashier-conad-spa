@@ -14,6 +14,7 @@ import {
     Route,
     Outlet,
     useNavigate,
+    useLocation
     
   } from "react-router-dom";
 
@@ -35,11 +36,17 @@ export default function CheckOutIndex() {
         setRowSelectedByIndex,
         clearSelections,
         addPaymentToList,
+        resetPayment
        
        }= useCheckout()
 
+    const location = useLocation()
+    console.log(location)
     
-    
+    const endFlow = location.pathname.indexOf('printer') > 0
+
+    console.log('endFlow', endFlow)
+
     const [loading, setLoading] = React.useState(false)
 
     //app/cashier/checkout/printer
@@ -48,9 +55,10 @@ export default function CheckOutIndex() {
         setLoading(true)
         console.log('close cart on checkout')
         closeCart()
+        resetPayment()
         await new Promise(resolve => setTimeout(resolve, 700)); 
         setLoading(false)
-        navigate(-1)
+        navigate('/app/cashier')
        
     }
 
@@ -118,11 +126,14 @@ export default function CheckOutIndex() {
             
             </div>
             <button
+            className='btn-primary w-full h-[6rem]'
+            disabled = {!endFlow}
             onClick={handleConfirm}
-            >CONFIRM</button>
+            >CONFERMA</button>
              <button
+            className='btn-primary w-full h-[4rem] bg-white text-black uppercase'
             onClick={handleBack}
-            >BACK</button>
+            >indietro</button>
 
 
             </div>

@@ -24,7 +24,6 @@ const currentCartModel = {
     count:0,
     total:0,
     weight:0,
-    payment_mode:'',
     fiscal_code:'',
     costumer:{},
     bags:0,
@@ -48,6 +47,8 @@ const useCart = () => {
     const [currentCart={...currentCartModel}, setCurrentCart] = usePersistentContext('currentCart')
 
     const searchCounter = React.useRef(0)
+
+    
     
 
     const {
@@ -202,6 +203,8 @@ const useCart = () => {
         c.closed_at_date=formattedDate
         c.closed_at_time=formattedTime
 
+        
+
         c.count= c.items.length
         c.purchase_items_count= c.items.filter(e=>!e.deleted).length
         c.total=total(c.items,'calculated_price')
@@ -226,6 +229,19 @@ const useCart = () => {
       
 
       }
+
+      const updateTicket = (ticket)=>{
+
+        let updatedCart = {
+          ...currentCart,
+          ticket:ticket,
+        }
+
+        setCurrentCart(updatedCart)
+      
+
+      }
+
 
       /* const addPayment = (item)=>{
 
@@ -357,6 +373,7 @@ const useCart = () => {
         addReadedItem,
         removeItemByKey,
         updatePayment,
+        updateTicket,
         closeCart 
     }
    

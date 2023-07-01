@@ -91,7 +91,7 @@ export const LandingPage = () => {
                 <button 
                     className={`${tabBtnClass}`}
                     onClick={startCashier}
-                >Apri un Cassa</button>
+                >REGISTRATORE CASSA</button>
                 {/* <button 
                     className={`${tabBtnClass}`}
                     onClick={startCashier}
