@@ -3,6 +3,8 @@
 import React from 'react'
 import ContentLayout from '../ContentLayout'
 import DisplayBalance from './cashDisplay/CashDisplay';
+import CashSplit from './CashSplit';
+
 
 import {
    
@@ -22,6 +24,7 @@ const CashIndex = ({back}) => {
     <Outlet />    
     <Routes>
         <Route index element={<Start/>} />
+        <Route path='split' element={<CashSplit/>} />
         <Route path='end' element={<Index/>} />
     </Routes>
     </>

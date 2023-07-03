@@ -84,11 +84,14 @@ const useCashInventory = () => {
   },0)
   
 
+  const overwrite = (newInventory) => setInventory(newInventory)
+
    
   
 
   return {
    inventory,
+   overwrite,
    setRowSelectedByIndex,
    updateQuantityToSelectedRow,
    clearSelections,

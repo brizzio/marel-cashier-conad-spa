@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import useSchedule from '../hooks/useSchedule'
 import useTimeZoneDate from './useTimeZone'
@@ -74,17 +75,15 @@ const logout = () => {
   localStorage.removeItem('user')
 }
 
-React.useEffect(()=>{
 
- 
 
  let message = 
  auth
  ?'user logged in'
  :'user logged out'
 
- console.log('useAuth says: ', message)
-},[])
+ //console.log('useAuth says: ', message)
+
     
 
   return {

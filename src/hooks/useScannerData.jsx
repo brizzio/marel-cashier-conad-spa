@@ -120,7 +120,14 @@ const useScannerData = () => {
       return result; 
     }
 
-  const clearCurrentRead = () => setCurrentRead({})
+  const clearCurrentRead = () => {
+    const gotCurentRead = JSON.stringify(currentRead)  !== '{}'
+    const gotReaded = JSON.stringify(readed)  !== '{}'
+    //clear active reading
+    if(gotCurentRead)  setCurrentRead({})
+    //clear last scanner data
+    if(gotReaded)  clearReaded()
+  }
 
   const updateCurrentRead = React.useCallback((obj) =>{
     let updatedData = {...currentRead, ...obj}
@@ -147,12 +154,12 @@ const useScannerData = () => {
         /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/.test(string)
     }
 
-    React.useMemo(()=>{
+    React.useEffect(()=>{
 
-        console.log('readed changed', readed, JSON.stringify(readed)  !== '{}')
+      //console.log('readed changed', readed, JSON.stringify(readed)  !== '{}')
         const gotReaded = JSON.stringify(readed)  !== '{}'
         if(gotReaded) evaluate().then(res=>{
-          
+          console.log('readed changed will be processed gotReaded', readed, gotReaded)
           console.log('res',res)
           
           if (res.found){
@@ -172,7 +179,7 @@ const useScannerData = () => {
             quantity.current=null
         })
     
-      },[readed])
+      },[])
 
 
 

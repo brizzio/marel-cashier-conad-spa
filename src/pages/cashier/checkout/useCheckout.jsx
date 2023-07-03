@@ -6,6 +6,7 @@ import usePersistentContext from '../../../hooks/usePersistentContext';
 import useTimeZoneDate from '../../../hooks/useTimeZone';
 import useScanner from '../../../hooks/useScanner';
 import useCashInventory from '../../../hooks/useCashInventory';
+import useScannerData from '../../../hooks/useScannerData';
 
 const useCheckout = () => {
 
@@ -110,10 +111,11 @@ const {
 const {
     
   inventory, 
+  overwrite
  
 } = useCashInventory()
 
-const {clearReaded} = useScanner()
+const {clearCurrentRead} = useScannerData()
 
 
 const {
@@ -128,7 +130,7 @@ const {
     const init = () =>{
       console.log('init payment and options')
       //clear last reading from scanner
-      clearReaded()
+      clearCurrentRead()
       setPayment({
         ...paymentModel,
         isEditing:true,
@@ -244,7 +246,7 @@ const {
       console.log('updateCash', obj)
       
       let updatedCurrencies = [...cash.currencies].reduce((a, c, i) => {
-        console.log('reduce',c.face, obj.face, c.face == obj.face)
+        //console.log('reduce',c.face, obj.face, c.face == obj.face)
         let item = c.face == obj.face?{...c, ...obj}:{...c}
       return [...a, item]
       },[])
@@ -257,10 +259,10 @@ const {
       },0);
 
         let result = {
-          due:payment.pending,
+          due:Number(payment.pending).toFixed(2),
           currencies:updatedCurrencies, 
-          total:tot,
-          change:tot - payment.pending,
+          total:Number(tot).toFixed(2),
+          change:Number(tot - payment.pending).toFixed(2),
           option:getOptionSelected()
         }
         console.log('result', result)
@@ -284,7 +286,7 @@ const {
           return {...a, ...obj}
       },[])
 
-      const updatedInventory = [...inventory].reduce((a,c,i)=>{
+      let updatedInventory = [...inventory].reduce((a,c,i)=>{
         //if cash currencies has quantity greater than 0 
         //then we update the inventory quantity
         let currencyQ=cash?.currencies[i].quantity
@@ -295,9 +297,136 @@ const {
 
       console.log('entries', entries)
       console.log('updatedInventory', updatedInventory)
+      //console.log('cash', cash)
 
+      const changeEntries = splitChange()
+      
+      console.log('changeEntries', changeEntries)
+
+      //update inventory removing  currency given as change
+     
+      updatedInventory = [...updatedInventory].reduce((a,c,i)=>{
+        
+        
+        let entr = changeEntries?changeEntries:[]
+        let curr = {...c}
+        console.log('entr', entr)
+        let entry = entr.filter(e=> e.face == c.face)[0]
+        console.log(entry)
+        if (entry){
+          let updatedInventoryQuantity = Number(curr.quantity - entry.quantity)
+          curr.quantity= updatedInventoryQuantity
+          console.log('updated curr', curr)
+        }
+       
+        return [...a, {...curr}]
+      },[])
+
+      let splitted = {
+        
+        ...cash,
+        entries,
+        split:changeEntries,
+        updatedInventory,
+        cashedInTotal:Number(entries.total),
+        pending:Number(payment.dueTotal-entries.total).toFixed(2),
+
+      }
+
+      console.log('splitted', splitted)
+
+      //update inventory with new data
+      overwrite(updatedInventory)
+      //update cash object
+      setCash(splitted)
     }
-  
+
+
+
+
+    function splitChange()
+    {
+       let amount = cash.change
+       
+
+         const filtered = [...inventory].filter(el => {
+          return el.quantity > 0;
+        });
+      
+      
+        //let notes = [ 2000, 500, 200, 100, 50, 20, 10, 5, 1 ];
+        let noteCounter = [];
+        
+        // count notes using Greedy approach
+        //console.log('splitting...', amount)
+        for (let i = 0; i < filtered.length; i++) {
+          //console.log('amount >= filtered[i].value', amount >= filtered[i].value, i, filtered[i].value)
+            if (amount >= filtered[i].value) {
+
+                let obj ={...filtered[i]}
+
+                obj.quantity = Math.floor(Number(amount).toFixed(2) / filtered[i].value);
+
+                //console.log('obj', obj)
+                noteCounter[i] = obj;
+                amount = amount % filtered[i].value;
+                //console.log('next amount value', amount)
+            }
+        }
+        
+        /* // Print notes
+       document.write("Currency Count ->" + "<br/>");
+        for (let i = 0; i < 9; i++) {
+            if (noteCounter[i] != 0) {
+                document.write(notes[i] + " : "
+                    + noteCounter[i] + "<br/>");
+            }
+        } */
+        let result = noteCounter.filter(el => el !== null);
+        
+        console.log('splitChange 00', result)
+        
+        return result
+        
+    }
+    
+
+    const addCashPaymentToList=()=>{
+
+      let c = cash?{...cash}:{}
+      let item = {}
+      let cashedIn = c.cashedInTotal - Number(c.change)
+
+      let ciTot = Number(payment.cashedInTotal + cashedIn)
+      let pendingTot = Number(ciTot - payment.due)
+      let isFullfill = Number(pendingTot) == 0
+
+      console.log('add cash payment to list', cash)
+      let opt = c.option
+      console.log('opt', opt)
+      item.id= millis,
+      item.added_at_date=formattedDate,
+      item.added_at_time=formattedTime,
+      item.value=Number(cashedIn).toFixed()
+      item.type_id=opt.id
+      item.type=opt.type
+      item.type_name=opt.title
+      item.entries=c.entries
+      item.change=c.split?c.split:[]
+      item.option=opt
+      
+      let newList = [...payment.list, item ]
+      
+      setPayment({
+        ...payment,
+        cashedInTotal:ciTot,
+        pending:pendingTot,
+        list:newList,
+        isFulfilled:isFullfill
+      })
+
+      updateOptionTotal(cashedIn)
+    }
 
     
 
@@ -342,6 +471,7 @@ const {
    updateCurrentCartWithPaymentData,
    clearSelections,
    addPaymentToList,
+   addCashPaymentToList,
    resetPayment,
    payment,
    options,

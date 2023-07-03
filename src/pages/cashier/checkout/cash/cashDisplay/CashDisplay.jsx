@@ -1,14 +1,11 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
-import DisplayBill from './CashDisplayBill';
-import DisplayCoin from './CashDisplayCoin';
 
 import useCashInventory from '../../../../../hooks/useCashInventory';
 import useIntl from '../../../../../hooks/useIntl';
-import useSwap from '../../../../../hooks/useSwap';
-import ContentLayout from '../../ContentLayout';
 
 import useCheckout from '../../useCheckout';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -19,7 +16,7 @@ const sample ={
     quantity:0,
 }
 
-const DisplayBalance = ({confirm}) => {
+const DisplayBalance = () => {
 
   
  
@@ -39,12 +36,12 @@ const DisplayBalance = ({confirm}) => {
 } = useCheckout()
 
 
-  const {swap} = useSwap()
+  const navigate = useNavigate()
 
   const [input, setInput] = React.useState('')
 
  
-  const [remainder, setRemainder] = React.useState(0)
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
 
   const [detail, setDetail] = React.useState([])
 
@@ -85,6 +82,16 @@ const confirmCurrencyQuantity = () =>{
 
 }
 
+const handleOpenDrawer =()=>{
+
+  openDrawer()
+  setIsDrawerOpen(true)
+  navigate('split')
+
+
+}
+
+
 
 
 
@@ -106,6 +113,7 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
       <div
       className='flex flex-col w-full h-full gap-4'
       >
+        cash split
         <div className='flex w-full h-fit gap-6'>
             <div
             className={`flex items-center  gap-2`}
@@ -176,7 +184,7 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
                             <span 
                             className="text-3xl font-thin  text-end w-full"
                             >
-                                {cash?.change.toFixed(2)}
+                                {cash?.change}
                             </span>
                         </div>
 
@@ -185,7 +193,7 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
                 </div>
 
            
-            <div className='grid grid-cols-4 gap-3 w-full max-h-[26rem] place-items-center'>
+            <div className='grid grid-cols-4 gap-3 w-full max-h-[26rem] place-items-center px-3'>
         
 
             {[...money]?.map((item, index) => (
@@ -199,11 +207,11 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
             </div>
             
             <button
-            className='btn-primary disabled:opacity-40'
+            className='btn-primary disabled:opacity-40 uppercase'
             disabled= {cash?.change < 0? true:false}
-            onClick={openDrawer}
+            onClick={handleOpenDrawer}
             >
-              apri cassetto
+              {isDrawerOpen?'chiudi cassetto':'APRI CASSETTO'}
             </button>
 
 
@@ -214,6 +222,14 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
       );
 }
 
+
+
+
+
+
+
+
+
 const Item = ({item=sample}) =>{
 
   const {
@@ -223,6 +239,8 @@ const Item = ({item=sample}) =>{
 } = useCheckout()
 
   const [value, setValue] = React.useState(0)
+
+  //console.log('item', item, value)
 
  const handleSetQuantity = () =>{
     let q = value + 1
