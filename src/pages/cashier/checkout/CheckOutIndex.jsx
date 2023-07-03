@@ -7,6 +7,7 @@ import useCart from '../../../hooks/useCart';
 import useCheckout from './useCheckout'
 import Main from './Main';
 import Bancomat from './Bancomat';
+import CashIndex from './cash/CashIndex';
 import Printer from './Printer';
 import {
    
@@ -146,7 +147,7 @@ export default function CheckOutIndex() {
                     payment={payment}
                     action={handleConfirm}
                 />} />
-                <Route path="cash" element={<Cash back={unSelect}/>} />
+                <Route path="cash/*" element={<CashIndex back={unSelect}/>} />
                 <Route path="bancomat" element={<Bancomat 
                 back={unSelect}
                 action={addPaymentToList}
@@ -208,20 +209,6 @@ export default function CheckOutIndex() {
 
 
 
-const Cash = ({back}) => {
-
-    
-    return(
-        <div className='flex flex-col gap-3 items-center justify-center h-full w-full debug'>
-            cash payment
-            <button
-            onClick={back}
-            >back</button>
-        </div>
-    )
-   
-
-}
 
 
 

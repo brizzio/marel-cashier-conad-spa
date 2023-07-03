@@ -5,6 +5,7 @@ import useCart from '../../../hooks/useCart';
 import usePersistentContext from '../../../hooks/usePersistentContext';
 import useTimeZoneDate from '../../../hooks/useTimeZone';
 import useScanner from '../../../hooks/useScanner';
+import useCashInventory from '../../../hooks/useCashInventory';
 
 const useCheckout = () => {
 
@@ -72,13 +73,45 @@ const useCheckout = () => {
 
 const keyPayment = 'payment'
 const keyOptions = 'options'
+
 const [payment, setPayment] = usePersistentContext(keyPayment)
 const [options, setOptions] = usePersistentContext(keyOptions)
+
+
+let money = [
+
+  {type:'bill', face:'500E', value:500, quantity:0, img_url:'500€.png'},
+  {type:'bill', face:'200E', value:200, quantity:0, img_url:'200€.png'},
+  {type:'bill', face:'100E', value:100, quantity:0, img_url:'100€.png'},
+  {type:'bill', face:'50E' ,value:50 ,quantity:0, img_url:'50€.png'},
+  {type:'bill', face:'20E' ,value:20 ,quantity:0, img_url:'20€.png'},
+  {type:'bill', face:'10E' ,value:10 ,quantity:0, img_url:'10€.png'},
+  {type:'bill', face:'5E' ,value:5, quantity:0, img_url:'5€.png'},          
+  {type:'coin', face:'2E' ,value:2 ,quantity:0, img_url:'2€.png'},
+  {type:'coin', face:'1E' ,value:1 , quantity:0, img_url:'1€.png'},
+  {type:'coin', face:'50C', value:0.5, quantity:0, img_url:'50cent.png'},
+  {type:'coin', face:'20C', value:0.20 , quantity:0, img_url:'20cent.png'},
+  {type:'coin', face:'10C', value:0.10 , quantity:0, img_url:'10cent.png'},
+  {type:'coin', face:'5C' ,value:0.05 , quantity:0 , img_url:'5cent.png'},
+  {type:'coin', face:'2C', value:0.2 , quantity:0, img_url:'2cent.png'},        
+  {type:'coin', face:'1C' ,value:0.01 , quantity:0, img_url:'1cent.png' }     
+]
+
+
+
+//used to manage the currency entrance at CashDisplay
+const [cash, setCash] = usePersistentContext('cash')
 
 const {
   currentCart,
   updatePayment
 }= useCart()
+
+const {
+    
+  inventory, 
+ 
+} = useCashInventory()
 
 const {clearReaded} = useScanner()
 
@@ -122,6 +155,20 @@ const {
       }, []);
       
       setOptions(clearedOptions)
+      
+    };
+
+    const getOptionSelected = () => {
+      console.log('getOptionSelected',options)
+      if(options){
+
+        return [...options].reduce((a, c, i) => {
+          console.log('getOptionSelected',c, c.selected)
+          let item = c.selected?{...c}:{} 
+          return {...a, ...item}
+        }, {});
+
+      }
       
     };
 
@@ -181,6 +228,82 @@ const {
 
     const resetPayment = () => setPayment(null)
 
+
+    //CASH
+    const resetCash = () => {
+      console.log('resetting cash', cash)
+      setCash({
+        currencies:money, 
+        due: payment.pending, 
+        total:0,
+        change:0 - payment.pending,
+        option:getOptionSelected()})
+    }
+
+    const updateCash = (obj) => {
+      console.log('updateCash', obj)
+      
+      let updatedCurrencies = [...cash.currencies].reduce((a, c, i) => {
+        console.log('reduce',c.face, obj.face, c.face == obj.face)
+        let item = c.face == obj.face?{...c, ...obj}:{...c}
+      return [...a, item]
+      },[])
+      
+      
+      let tot = updatedCurrencies.reduce((a, c) =>{
+        console.log(a, c.total)
+        let item = c.total?c.total:0
+        return a + item
+      },0);
+
+        let result = {
+          due:payment.pending,
+          currencies:updatedCurrencies, 
+          total:tot,
+          change:tot - payment.pending,
+          option:getOptionSelected()
+        }
+        console.log('result', result)
+        setCash(result)
+    }
+      
+    const openDrawer =() =>{
+      console.log('open drawer')
+      console.log('currencies', cash.currencies)
+      console.log('invantory', inventory)
+
+      const entries = [...cash.currencies].reduce((a,c)=>{
+          let item = c.quantity >0?{...c}:null
+          //return only updated items
+          let list = a.list?[...a.list]:[]
+          let tot = a.total?a.total:0
+          let obj = {
+            list:item?[...list, item]:[...list],
+            total: item?tot + item.total:tot
+          }
+          return {...a, ...obj}
+      },[])
+
+      const updatedInventory = [...inventory].reduce((a,c,i)=>{
+        //if cash currencies has quantity greater than 0 
+        //then we update the inventory quantity
+        let currencyQ=cash?.currencies[i].quantity
+        let updatedInventoryQuantity = c.quantity + currencyQ
+        let item = {...c, quantity: updatedInventoryQuantity}
+        return [...a, {...item}]
+      },[])
+
+      console.log('entries', entries)
+      console.log('updatedInventory', updatedInventory)
+
+    }
+  
+
+    
+
+
+
+
     
 
    /*  const updateTotalToSelectedRow = (aquant) => {
@@ -208,7 +331,12 @@ const {
   
 
   return {
-  
+   
+   money,
+   cash,
+   resetCash,
+   updateCash,
+   openDrawer,
    init,
    setRowSelectedByIndex,
    updateCurrentCartWithPaymentData,

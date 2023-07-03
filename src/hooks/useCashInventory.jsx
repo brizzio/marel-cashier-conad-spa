@@ -5,6 +5,25 @@ import usePersistentContext from './usePersistentContext'
 
 const useCashInventory = () => {
 
+  let inventoryDefaultData = [
+    {type:'bill', face:'500E', value:500, quantity:10, img_url:'500€.png'},
+    {type:'bill', face:'200E', value:200, quantity:10, img_url:'200€.png'},
+    {type:'bill', face:'100E', value:100, quantity:10, img_url:'100€.png'},
+    {type:'bill', face:'50E' ,value:50 ,quantity:10, img_url:'50€.png'},
+    {type:'bill', face:'20E' ,value:20 ,quantity:10, img_url:'20€.png'},
+    {type:'bill', face:'10E' ,value:10 ,quantity:10, img_url:'10€.png'},
+    {type:'bill', face:'5E' ,value:5, quantity:10, img_url:'5€.png'},                   
+    {type:'coin', face:'2E' ,value:2 ,quantity:10, img_url:'2€.png'},
+    {type:'coin', face:'1E' ,value:1 , quantity:10, img_url:'1€.png'},
+    {type:'coin', face:'50C', value:0.5, quantity:10, img_url:'50cent.png'},
+    {type:'coin', face:'20C', value:0.20 , quantity:10, img_url:'20cent.png'},
+    {type:'coin', face:'10C', value:0.10 , quantity:10, img_url:'10cent.png'},
+    {type:'coin', face:'5C' ,value:0.05 , quantity:10 , img_url:'5cent.png'},
+    {type:'coin', face:'2C', value:0.2 , quantity:10, img_url:'2cent.png'},        
+    {type:'coin', face:'1C' ,value:0.01 , quantity:10, img_url:'1cent.png' }     
+  ]
+
+
     const key = 'inventory'
     const [inventory=[], setInventory] = usePersistentContext(key)
   
@@ -37,6 +56,13 @@ const useCashInventory = () => {
       
     };
 
+    const money = () => {
+      return [...inventory].reduce((a, c, i) => {
+        [...a, { ...c, selected: false, quantity:0 }];
+      }, []);
+      
+    };
+
     const updateQuantityToSelectedRow = (quant) => {
       const arr = [...inventory].reduce((a, c, i) => {
         let updatedRow = c.selected
@@ -66,6 +92,7 @@ const useCashInventory = () => {
    setRowSelectedByIndex,
    updateQuantityToSelectedRow,
    clearSelections,
+   money,
    total
   }
 }
@@ -74,25 +101,6 @@ export default useCashInventory
 
 
 
-let inventoryDefaultData = [
-
-    {type:'bill', face:'200', value:200, quantity:10},
-    {type:'bill', face:'100', value:100, quantity:10},
-    {type:'bill', face:'50' ,value:50 ,quantity:10},
-    {type:'bill', face:'20' ,value:20 ,quantity:10},
-    {type:'bill', face:'10' ,value:10 ,quantity:10},
-    {type:'bill', face:'5' ,value:5, quantity:10},        
-    {type:'bill', face:'2' ,value:2 , quantity:10},        
-    {type:'bill', face:'1' ,value:1 , quantity:10},       
-    {type:'coin', face:'2€' ,value:2 ,quantity:10},
-    {type:'coin', face:'1€' ,value:1 , quantity:10},
-    {type:'coin', face:'50C', value:0.5, quantity:10},
-    {type:'coin', face:'20C', value:0.20 , quantity:10},
-    {type:'coin', face:'10C', value:0.10 , quantity:10},
-    {type:'coin', face:'5C' ,value:0.05 , quantity:10 },
-    {type:'coin', face:'2C', value:0.2 , quantity:10},        
-    {type:'coin', face:'1C' ,value:0.01 , quantity:10 },     
-     ]
 
      
   
