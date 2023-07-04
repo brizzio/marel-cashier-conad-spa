@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import usePersistentContext from './usePersistentContext'
+import useIntl from './useIntl'
 
 const useCashInventory = () => {
 
@@ -27,7 +28,7 @@ const useCashInventory = () => {
     const key = 'inventory'
     const [inventory=[], setInventory] = usePersistentContext(key)
   
-   
+    const {currency} = useIntl()
   
     React.useEffect(() => {
       let existing = localStorage.getItem(key)

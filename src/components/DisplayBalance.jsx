@@ -144,6 +144,7 @@ const field =`text-2xl font-thin border border-teal-300 border-2 border-opacity-
 
 const Item = ({item=sample, i, keyboardValue}) =>{
 
+    let val = Math.floor(item.value * Math.pow(10, 2)) / Math.pow(10, 2)
  
     return (
         <>
@@ -151,14 +152,14 @@ const Item = ({item=sample, i, keyboardValue}) =>{
         ?<DisplayBill 
         count={item.quantity}
         face={item.face}
-        value={item.value}
+        value={val}
         selected={!!item.selected}
         keyboard={keyboardValue}
         index={i}/>
         :<DisplayCoin 
         count={item.quantity}
         face={item.face}
-        value={item.value}
+        value={val}
         selected={!!item.selected}
         keyboard={keyboardValue}
         index={i}/>

@@ -25,7 +25,7 @@ const RenderListItem = ({item, index}) => {
         removeItemByKey(e)
     }
     
-
+    const price = item.calculated_price?item.calculated_price:0
     
 
     return (
@@ -44,7 +44,7 @@ const RenderListItem = ({item, index}) => {
             </span>
             <div className="flex items-center gap-0.5">
                 <span className="font-bold">{item.currency}</span>
-                <span className="text-normal">{item.calculated_price.toFixed(2)}</span>
+                <span className="text-normal">{price.toFixed(2)}</span>
             </div>
             
             

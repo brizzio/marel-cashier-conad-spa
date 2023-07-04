@@ -10,6 +10,7 @@ import useSwap from '../../hooks/useSwap';
 //import BouncingDotsLoader from '../../components/BouncingDotsLoader/BouncingDotsLoader';
 import CheckOutIndex from './checkout/CheckOutIndex';
 import useCheckout from './checkout/useCheckout';
+import Bags from './bags/Bags';
 
 
 
@@ -217,11 +218,12 @@ export const CashierPage = () => {
                     <button className={`${largeBtnClass}`}>NO FOOD</button>
 
                     <button className={`${largeBtnClass}`}>PESCE</button>
-                    <button className={`${largeBtnClass}`}>CARNE</button>
+                    <div className={`col-span-2 row-span-2 flex flex-col bg-white bg-opacity-90 text-teal-900 font-semibold border border-teal-900 border-opacity-70 rounded-lg shadow-lg`}>
+                        <Bags active={!!currentCart?.active}/> 
+                    </div>
 
                     <button className={`${largeBtnClass}`}>FRUTTA</button>
-                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-magnifying-glass text-stone-400"></i></button>
-                    <button className={`${regularBtnClass}`}><i className="fas fa-2x fa-person-arrow-down-to-line text-stone-400"></i></button>   
+                    
                 </div>
 
                 <div className="flex flex-col grow w-4/12  gap-1">
@@ -271,9 +273,9 @@ export const CashierPage = () => {
     const DisplayTotals = ({cart}) => {
 
         
-        const itemsCount = cart.count
-        const cartWeight = cart.weight
-        const cartTotal = cart.total
+        const itemsCount = cart.count?cart.count:0
+        const cartWeight = cart.weight?cart.weight:0
+        const cartTotal = cart.total?cart.total:0
 
 
         return(

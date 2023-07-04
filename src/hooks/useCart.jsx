@@ -102,6 +102,37 @@ const useCart = () => {
         setCurrentCart({active:false})
       }
 
+    const addReferencedItem = React.useCallback((product, quantity) =>{
+
+        if (!currentCart) return;
+        let quant = quantity
+        let item = {...product}
+          
+        console.log('quant', quant)
+          
+              makeItem(item, quant)
+              .then((res)=>{
+                 console.log('res',res, Array.isArray(res)?res.length:1)
+                 return Array.from(res).length==1
+                  ? [...currentCart.items, res[0]]
+                  : [...currentCart.items, ...res]
+              })
+              .then((newList)=>{
+                  console.log('newList',newList)
+                  const updatedCart = {
+                      ...currentCart,
+                      items: newList,
+                      count: newList.length,
+                      total: total(newList, 'calculated_price'),
+                      weight: sumWeight(newList)
+                  }
+                  console.log('updatedCart',updatedCart)
+                  setCurrentCart(updatedCart)
+              })
+         
+  })
+
+
 
       const addReadedItem = React.useCallback((scan) =>{
 
@@ -186,6 +217,54 @@ const useCart = () => {
         setCurrentCart(removedState)
     
      })
+
+
+     const removeItemById = React.useCallback((id)=>{
+
+      const updatedItems = currentCart.items?[...currentCart.items]:[]
+      if (updatedItems.length){
+
+        for (let i = 0; i < updatedItems.length; i++) {
+          if (updatedItems[i].product_id==id && !updatedItems[i].deleted) {
+              updatedItems[i].deleted = true;
+              setCurrentCart({
+                ...currentCart, 
+                items:updatedItems,
+                total: total(updatedItems, 'calculated_price'),
+                weight: sumWeight(updatedItems)
+              })
+
+             break;
+          }
+        }
+
+
+
+     }
+    })
+
+
+    /*  if(action=='remove'){
+      const updatedItems = currentCart.items 
+      if (updatedItems.length){
+
+        for (let i = 0; i < updatedItems.length; i++) {
+          if (updatedItems[i].product_id==145 && !updatedItems[i].deleted) {
+              updatedItems[i].deleted = true;
+              setCurrentCart({
+                ...currentCart, 
+                bags:count-1,
+                items:updatedItems,
+                total: total(updatedItems, 'calculated_price'),
+                weight: sumWeight(updatedItems)
+              })
+
+             break;
+          }
+        }
+        
+      } 
+    } */
             
     
     const deleteCart = React.useCallback((e) => { 
@@ -371,7 +450,9 @@ const useCart = () => {
         deleteCart,
         currentCart,
         addReadedItem,
+        addReferencedItem,
         removeItemByKey,
+        removeItemById,
         updatePayment,
         updateTicket,
         closeCart 
