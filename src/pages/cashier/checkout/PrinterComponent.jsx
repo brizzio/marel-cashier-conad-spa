@@ -10,7 +10,7 @@ import useCart from '../../../hooks/useCart';
 import useAuth from '../../../hooks/useAuth';
 import useCashier from '../../../hooks/useCashier';
 
-const Printer = () => {
+const PrinterComponent = () => {
 
   const navigate = useNavigate()
 
@@ -183,7 +183,7 @@ const displayTicket = ()=>{
   )
 }
 
-export default Printer
+export default PrinterComponent
 
 
 const liner = (line)=>{

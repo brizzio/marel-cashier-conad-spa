@@ -29,7 +29,7 @@ const generate = async()=>{
     try {
 
     const cart = {...currentCart}
-    const items = [...cart.items ]
+    const items = cart.items?[...cart.items ]:[]
     const pays = [...cart.payment.list ]
     const c = {...cashier}
     const ticket = {}

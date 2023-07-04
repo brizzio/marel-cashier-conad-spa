@@ -8,7 +8,8 @@ import useCheckout from './useCheckout'
 import Main from './Main';
 import Bancomat from './Bancomat';
 import CashIndex from './cash/CashIndex';
-import Printer from './Printer';
+import PrinterComponent from './PrinterComponent';
+
 import {
    
     Routes,
@@ -156,7 +157,7 @@ export default function CheckOutIndex() {
                 />} />
                 <Route path="bonus" element={<Bonus back={unSelect}/>} />
                 <Route path="difer" element={<Difer back={unSelect}/>} />
-                <Route path="printer" element={<Printer back={unSelect}/>} />
+                <Route path="printer" element={<PrinterComponent back={unSelect}/>} />
 
             </Routes>
             </div>
