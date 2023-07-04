@@ -4,6 +4,7 @@ import usePersistentContext from './usePersistentContext'
 import useTimeZoneDate from './useTimeZone'
 import useCart from './useCart'
 import useCashier from './useCashier'
+import useCheckout from '../pages/cashier/checkout/useCheckout'
 
 const useTicket = () => {
 
@@ -22,7 +23,7 @@ const {
     formattedTime
   } = useTimeZoneDate()
 
-
+const {resetPayment} = useCheckout()
 
 const generate = async()=>{
     
@@ -117,19 +118,51 @@ const generate = async()=>{
     }
 
     ticket.payment = [...pays].map((el)=>{
-    
-        return {
-            ...el.raw,
-            type:'debito',
-            mode:el.type_name,
-            id:el.id
+
+        let obj 
+
+        if(el.type_id == 1){
+            //element is payment mode debit/credit card aka bancomat
+
+            obj = {
+                ...el.raw,
+                type:'debito',
+                mode:el.type_name,
+                id:el.id,
+                success:el.success,
+                left:`${el.id} - ${el.raw.operator} ${el.raw.bank} `,
+                right:`Imp.: € ${Number(el.raw.amount).toFixed(2)}`
+            }
+
+           
         }
+
+        if(el.type_id == 2){
+            //element is payment mode cash aka contanti
+
+            obj = {
+                amount:el.value,
+                type:'contanti',
+                mode:el.type_name,
+                id:el.id,
+                success:true,
+                left:`${el.id} - ${el.type_name} `,
+                right:`Imp.: € ${Number(el.value).toFixed(2)} `
+
+            }
+        }
+    
+        return obj
     })
 
     ticket.invoice = await invoice(ticket)
 
     
     setTicket(ticket)
+
+    //now we have a ticket so lets clean the payment object in memory and storage
+
+    resetPayment()
 
     return true
         
@@ -141,10 +174,104 @@ const generate = async()=>{
 }
 
 
+/* raw ={
+    "id": "78745d86-3627-4845-b849-c7d82bc24650",
+    "operator": "VISA",
+    "bank": "BANK",
+    "account": "151224445",
+    "amount": "3.00"
+  }
+ 
 
+  {
+    "isEditing": true,
+    "dueTotal": 6.8100000000000005,
+    "cashedInTotal": 6.8100000000000005,
+    "pending": 0,
+    "list": [
+        {
+            "success": true,
+            "raw": {
+                "id": "78745d86-3627-4845-b849-c7d82bc24650",
+                "operator": "VISA",
+                "bank": "BANK",
+                "account": "151224445",
+                "amount": "3.00"
+            },
+            "id": 1691165099327,
+            "added_at_date": "2023-07-04",
+            "added_at_time": "13:04:59",
+            "value": 3,
+            "type_id": 1,
+            "type": "bancomat",
+            "type_name": "carte"
+        },
+        {
+            "id": 1691165128380,
+            "added_at_date": "2023-07-04",
+            "added_at_time": "13:05:28",
+            "value": "3.81",
+            "type_id": 2,
+            "type": "cash",
+            "type_name": "contanti",
+            "entries": {
+                "list": [
+                    {
+                        "type": "bill",
+                        "face": "5E",
+                        "value": 5,
+                        "quantity": 1,
+                        "img_url": "5€.png",
+                        "total": 5
+                    }
+                ],
+                "total": 5
+            },
+            "change": [
+                {
+                    "type": "coin",
+                    "face": "1E",
+                    "value": 1,
+                    "quantity": 1,
+                    "img_url": "1€.png"
+                },
+                {
+                    "type": "coin",
+                    "face": "10C",
+                    "value": 0.1,
+                    "quantity": 1,
+                    "img_url": "10cent.png"
+                },
+                {
+                    "type": "coin",
+                    "face": "5C",
+                    "value": 0.05,
+                    "quantity": 1,
+                    "img_url": "5cent.png"
+                },
+                {
+                    "type": "coin",
+                    "face": "1C",
+                    "value": 0.01,
+                    "quantity": 4,
+                    "img_url": "1cent.png"
+                }
+            ],
+            "option": {
+                "id": 2,
+                "type": "cash",
+                "url": "cash",
+                "title": "contanti",
+                "icon": "fas fa-hand-holding-dollar",
+                "selected": true,
+                "total": 0
+            }
+        }
+    ],
+    "isFulfilled": true
+}
 
-
-
+*/
 
 
 

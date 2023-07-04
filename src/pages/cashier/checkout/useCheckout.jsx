@@ -360,20 +360,21 @@ const {
         // count notes using Greedy approach
         //console.log('splitting...', amount)
         for (let i = 0; i < filtered.length; i++) {
-          //console.log('amount >= filtered[i].value', amount >= filtered[i].value, i, filtered[i].value)
+          console.log('amount >= filtered[i].value', amount >= filtered[i].value, i, filtered[i].value)
             if (amount >= filtered[i].value) {
 
                 let obj ={...filtered[i]}
 
-                obj.quantity = Math.floor(Number(amount).toFixed(2) / filtered[i].value);
+                console.log('amount value', amount, obj)
+                obj.quantity = Math.floor(amount / filtered[i].value);
 
-                //console.log('obj', obj)
+                console.log('obj', obj)
                 noteCounter[i] = obj;
-                amount = amount % filtered[i].value;
-                //console.log('next amount value', amount)
+                amount =  Math.ceil(amount % filtered[i].value * Math.pow(10, 2)) / Math.pow(10, 2)
+                console.log('next amount value', amount)
             }
         }
-        
+        //Math.ceil(v * Math.pow(10, n)) / Math.pow(10, n)
         /* // Print notes
        document.write("Currency Count ->" + "<br/>");
         for (let i = 0; i < 9; i++) {
@@ -398,7 +399,7 @@ const {
       let cashedIn = c.cashedInTotal - Number(c.change)
 
       let ciTot = Number(payment.cashedInTotal + cashedIn)
-      let pendingTot = ciTot - payment.dueTotal
+      let pendingTot = Number(payment.dueTotal - ciTot).toFixed(2) * 1
       let isFullfill = pendingTot == 0
 
       console.log('add cash payment ciTot', ciTot)

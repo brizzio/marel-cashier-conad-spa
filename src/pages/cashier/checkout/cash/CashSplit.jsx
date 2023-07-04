@@ -99,7 +99,7 @@ const CashSplit = () => {
                     <span 
                     className="text-3xl font-semibold  text-end w-full"
                     >
-                        {cash?.due}
+                        {Number(cash?.due).toFixed(2)}
                     </span>
                 </div>
               </div>
@@ -123,7 +123,7 @@ const CashSplit = () => {
                           <span 
                           className="text-3xl font-thin  text-end w-full"
                           >
-                              {cash?.cashedInTotal?cash?.cashedInTotal:'0.00'}
+                              {cash?.cashedInTotal?Number(cash?.cashedInTotal).toFixed(2):'0.00'}
                           </span>
                       </div>
                   </div>
@@ -148,7 +148,7 @@ const CashSplit = () => {
                             <span 
                             className="text-3xl font-thin  text-end w-full"
                             >
-                                {cash?.pending}
+                                {Number(cash?.change).toFixed(2)}
                             </span>
                         </div>
 
@@ -166,7 +166,7 @@ const CashSplit = () => {
 
             
 
-            {[...cash.split]?.map((item, index) => (
+            {cash?.split.map((item, index) => (
                 <SplittedItem 
                 key={index} 
                 item={item} 

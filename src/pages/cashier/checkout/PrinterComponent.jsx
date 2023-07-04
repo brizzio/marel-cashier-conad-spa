@@ -44,7 +44,7 @@ const PrinterComponent = () => {
     if (ticket){
       save()  
       setView(displayTicket())
-      reset()
+      //reset()
     } 
 
     
@@ -56,6 +56,7 @@ const displayTicket = ()=>{
 
   if(!ticket) return '';
   let t = {...ticket}
+  let pay = ticket.payment?[...ticket.payment]:[]
 
   const title = `flex justify-center w-full text-[1.5rem] font-semibold tracking-tighter`
   const subTitle = `flex justify-center w-full text-[1.5rem] font-normal tracking-tighter`
@@ -68,6 +69,9 @@ const displayTicket = ()=>{
   const total = `flex justify-end w-full text-[1.5rem] font-semibold tracking-tighter gap-3 uppercase mt-4`
   const weight = `flex justify-end w-full text-[1.2rem] font-thin tracking-tighter gap-3 uppercase`
 
+  const payClass = `flex flex-col px-2 mt-4 w-full text-[1rem] font-thin tracking-tighter gap-1 `
+
+  const strIVA = `DI CUI IVA: € ${Number(t.cashed_in_total.data * 0.22).toFixed(2).replace(".",",")}`
 
   return(
       <div
@@ -86,10 +90,10 @@ const displayTicket = ()=>{
               <span>{t.fiscal_code.title}:</span>
               <span>{t.fiscal_code.data}</span>
           </div>
-          <div className={msg}>
+          <div className={`flex justify-center w-full font-bold tracking-tighter mt-4`}>
               <span>DOCUMENTO GESTIONALE</span>
           </div>
-          <div className={spot}>
+          <div className={`flex justify-center w-full font-thin tracking-tighter`}>
               <span>SENZA VALORE FISCALE</span>
           </div>
           <div className={bold}>
@@ -134,6 +138,29 @@ const displayTicket = ()=>{
           <div className={weight}>
               <span>{t.weight.title} </span>
               <span className='tracking-normal'>{t.weight.data.toFixed(2).replace(".",",")}Kg. </span>
+          </div>
+          <div className={`flex justify-end w-full text-[1.2rem] font-thin tracking-tighter gap-3 uppercase`}> {/* ******* IVA DETAIL ******* */}
+              <span className='tracking-normal'>{strIVA}</span>
+          </div>
+          <div className={payClass}>
+              <span>PAGAMENTI </span>
+              {
+                pay.reduce((a,c,i)=>{
+
+                      let left = c.left
+                      let right = c.right
+                      let row = <div
+                      key={i}
+                      className='flex justify-between'
+                      >
+                        <span>{left}</span>
+                        <span>{right}</span>
+                      </div>
+                  return [...a , row]
+              },[])
+                
+                
+                }
           </div>
 
 

@@ -60,7 +60,7 @@ const Main = () => {
 
             }
 
-            {payment?.pending == 0
+            {Math.abs(payment?.pending) == 0
                                 ?<button
                                 className={`absolute bottom-8 right-8 w-1/3 btn-primary`}
                                 onClick={saveAndPrint}
