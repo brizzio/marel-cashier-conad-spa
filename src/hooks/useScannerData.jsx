@@ -154,9 +154,9 @@ const useScannerData = () => {
         /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/.test(string)
     }
 
-    React.useEffect(()=>{
+    React.useMemo(()=>{
 
-      //console.log('readed changed', readed, JSON.stringify(readed)  !== '{}')
+      console.log('readed changed', readed, JSON.stringify(readed)  !== '{}')
         const gotReaded = JSON.stringify(readed)  !== '{}'
         if(gotReaded) evaluate().then(res=>{
           console.log('readed changed will be processed gotReaded', readed, gotReaded)
@@ -179,7 +179,7 @@ const useScannerData = () => {
             quantity.current=null
         })
     
-      },[])
+      },[readed])
 
 
 

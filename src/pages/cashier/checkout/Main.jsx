@@ -33,6 +33,12 @@ const Main = () => {
             {
                 payment?.list.length
                 ?[...payment.list].map((el,i)=>{
+                    
+                    let detail = el.type == 'bancomat'
+                    ?el.raw.operator
+                    :'pagamento'
+                    
+                    
                     return(
                         <div key={i}
                         className='flex w-full gap-4 text-2xl items-center bg-stone-200 rounded-xl shadow-xl py-4 px-2 text-teal-700'
@@ -40,7 +46,7 @@ const Main = () => {
                             <span>{i+1}</span>
                             <span>{el.id}</span>
                             <span>{el.type_name}</span>
-                            <span>{el.raw.operator}</span>
+                            <span>{detail}</span>
                             <span>{Number(el.value).toFixed(2)}</span>
                         </div>
                     )
@@ -96,5 +102,64 @@ Main.defaultProp = {
 export default Main
 
 
+/* const paymentModel = {
+    isEditing:false,
+    dueTotal:0,
+    cashedInTotal:0,
+    pending:0,
+    list:[],
+    isFulfilled:false
+}
 
-       
+  const paymentItemModel = {
+    isEditing:false,
+    dueTotal:0,
+    cashedInTotal:0,
+    pending:0,
+    list:[],
+    isFulfilled:false
+
+  }
+
+
+  const optionsModel= [
+    {
+        id:1,
+        type:'bancomat',
+        url:'bancomat',
+        title:'carte',
+        icon:'fas fa-credit-card',
+        selected:false,
+        total:0
+    },
+    {
+        id:2,  
+        type:'cash',
+        url:'cash',
+        title:'contanti',
+        icon:'fas fa-hand-holding-dollar',
+        selected:false,
+        total:0
+    },
+    {
+      id:3,  
+        type:'bonus',
+        url:'bonus',
+        title:'bonus',
+        icon:'fas fa-gifts',
+        selected:false,
+        total:0
+    },
+    {
+      id:4,
+        type:'difer',
+        url:'difer',
+        title:'altri',
+        icon:'fas fa-money-check-dollar',
+        selected:false,
+        total:0
+    },
+
+   
+]
+        */

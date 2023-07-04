@@ -52,7 +52,7 @@ const useCheckout = () => {
     },
     {
       id:3,  
-      type:'bonus',
+        type:'bonus',
         url:'bonus',
         title:'bonus',
         icon:'fas fa-gifts',
@@ -398,8 +398,12 @@ const {
       let cashedIn = c.cashedInTotal - Number(c.change)
 
       let ciTot = Number(payment.cashedInTotal + cashedIn)
-      let pendingTot = Number(ciTot - payment.due)
-      let isFullfill = Number(pendingTot) == 0
+      let pendingTot = ciTot - payment.dueTotal
+      let isFullfill = pendingTot == 0
+
+      console.log('add cash payment ciTot', ciTot)
+      console.log('add cash payment pendingTot',  ciTot , payment.dueTotal, ciTot - payment.dueTotal)
+      console.log('add cash payment isFullfill', pendingTot, pendingTot == 0)
 
       console.log('add cash payment to list', cash)
       let opt = c.option
@@ -407,7 +411,7 @@ const {
       item.id= millis,
       item.added_at_date=formattedDate,
       item.added_at_time=formattedTime,
-      item.value=Number(cashedIn).toFixed()
+      item.value=Number(cashedIn).toFixed(2)
       item.type_id=opt.id
       item.type=opt.type
       item.type_name=opt.title

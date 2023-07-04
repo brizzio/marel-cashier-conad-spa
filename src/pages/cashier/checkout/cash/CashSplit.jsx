@@ -4,7 +4,7 @@ import React from 'react'
 import useCashInventory from '../../../../hooks/useCashInventory';
 import useIntl from '../../../../hooks/useIntl';
 import useSwap from '../../../../hooks/useSwap';
-
+import { useNavigate } from 'react-router-dom';
 
 import useCheckout from '../useCheckout';
 
@@ -19,7 +19,7 @@ const sample ={
 
 const CashSplit = () => {
 
-  
+  const navigate = useNavigate()
  
   const {
     
@@ -32,6 +32,7 @@ const CashSplit = () => {
     
     cash,
     resetCash,
+    addCashPaymentToList,
     
     payment={}
 } = useCheckout()
@@ -61,6 +62,14 @@ const CashSplit = () => {
     console.log('payment',payment)
   
   },[])
+
+
+  const handleCashConfirm = () =>{
+      console.log('confirm cash payment')
+      addCashPaymentToList()
+      navigate('/app/cashier/checkout')
+    
+  }
 
   
 
@@ -170,7 +179,7 @@ const CashSplit = () => {
             <button
             className='absolute bottom-2 w-full btn-primary disabled:opacity-40 uppercase'
             disabled= {cash?.change < 0? true:false}
-            onClick={()=>console.log('Conferma e chiudi il cassetto')}
+            onClick={handleCashConfirm}
             >
               Conferma e chiudi il cassetto
             </button>
@@ -186,19 +195,9 @@ const CashSplit = () => {
 
 
 
-
-
-
-
-
 const SplittedItem = ({item=sample}) =>{
 
   
-
-  const [value, setValue] = React.useState(item?.quantity)
-
-  
-    
  
  return (
   <div className='relative w-full h-full'>
